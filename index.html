@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="InstanceSplat project page. Public release materials are being prepared."
+    />
+    <meta name="theme-color" content="#f4f5f1" />
+    <title>InstanceSplat</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f4f5f1;
+        --ink: #111512;
+        --muted: #5d665f;
+        --line: #cbd0ca;
+        --signal: #18794e;
+        --accent: #e4543e;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+      }
+
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        letter-spacing: 0;
+      }
+
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      header,
+      footer {
+        width: min(1180px, calc(100% - 48px));
+        margin: 0 auto;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .wordmark {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 760;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .status::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--signal);
+        content: "";
+      }
+
+      main {
+        width: min(1180px, calc(100% - 48px));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+        align-items: center;
+        gap: clamp(44px, 8vw, 120px);
+        padding: 72px 0 88px;
+      }
+
+      .eyebrow {
+        margin: 0 0 20px;
+        color: var(--signal);
+        font-size: 13px;
+        font-weight: 720;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 76px;
+        font-weight: 500;
+        line-height: 0.98;
+        overflow-wrap: anywhere;
+      }
+
+      .lede {
+        max-width: 620px;
+        margin: 28px 0 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.65;
+      }
+
+      .field {
+        position: relative;
+        min-height: 380px;
+        overflow: hidden;
+        border-left: 1px solid var(--line);
+      }
+
+      .axis {
+        position: absolute;
+        inset: 22px 0 22px 34px;
+        border-bottom: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+      }
+
+      .point {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+
+      .point:nth-child(2) { left: 18%; top: 66%; }
+      .point:nth-child(3) { left: 31%; top: 48%; background: var(--signal); }
+      .point:nth-child(4) { left: 43%; top: 58%; }
+      .point:nth-child(5) { left: 55%; top: 32%; background: var(--accent); }
+      .point:nth-child(6) { left: 68%; top: 45%; }
+      .point:nth-child(7) { left: 78%; top: 22%; background: var(--signal); }
+      .point:nth-child(8) { left: 86%; top: 35%; }
+      .point:nth-child(9) { left: 48%; top: 75%; background: var(--accent); }
+
+      .field-label {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 24px 0 30px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      footer p {
+        margin: 0;
+      }
+
+      @media (max-width: 760px) {
+        header,
+        footer,
+        main {
+          width: min(100% - 32px, 620px);
+        }
+
+        header {
+          min-height: 66px;
+        }
+
+        main {
+          grid-template-columns: 1fr;
+          gap: 44px;
+          padding: 56px 0 64px;
+        }
+
+        h1 {
+          font-size: 52px;
+        }
+
+        .lede {
+          font-size: 16px;
+        }
+
+        .field {
+          min-height: 240px;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+
+        footer {
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <p class="wordmark">InstanceSplat</p>
+        <span class="status">Project page online</span>
+      </header>
+
+      <main>
+        <section aria-labelledby="project-title">
+          <p class="eyebrow">Research project</p>
+          <h1 id="project-title">InstanceSplat</h1>
+          <p class="lede">
+            Project materials, results, and the public code release are being
+            prepared.
+          </p>
+        </section>
+
+        <div class="field" aria-label="Abstract point field">
+          <div class="axis"></div>
+          <span class="point"></span>
+          <span class="point"></span>
+          <span class="point"></span>
+          <span class="point"></span>
+          <span class="point"></span>
+          <span class="point"></span>
+          <span class="point"></span>
+          <span class="point"></span>
+          <p class="field-label">PUBLIC RELEASE / IN PREPARATION</p>
+        </div>
+      </main>
+
+      <footer>
+        <p>InstanceSplat</p>
+        <p>Project page hosted on GitHub Pages</p>
+      </footer>
+    </div>
+  </body>
+</html>
