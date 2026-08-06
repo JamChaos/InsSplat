@@ -579,6 +579,162 @@
         color: var(--muted);
       }
 
+      .instance-demo {
+        margin: 56px auto 0;
+        padding-top: 34px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .instance-demo-head h3 {
+        margin: 0;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .instance-demo-head p {
+        max-width: 760px;
+        margin: 9px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .instance-demo-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 226px;
+        gap: 24px;
+        align-items: start;
+        margin-top: 24px;
+      }
+
+      .instance-demo-viewer {
+        min-width: 0;
+      }
+
+      .instance-demo-canvas-shell {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        border: 1px solid var(--line-strong);
+        background: #111716;
+      }
+
+      #instance-demo-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+      }
+
+      #instance-demo-canvas:active {
+        cursor: grabbing;
+      }
+
+      .instance-demo-status {
+        position: absolute;
+        right: 12px;
+        bottom: 10px;
+        padding: 5px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        background: rgba(10, 15, 14, 0.72);
+        color: rgba(255, 255, 255, 0.86);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        pointer-events: none;
+      }
+
+      .instance-demo-help {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .instance-demo-controls {
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: var(--paper-soft);
+      }
+
+      .instance-demo-controls h4 {
+        margin: 0;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 15px;
+        line-height: 1.3;
+      }
+
+      .instance-demo-controls p {
+        margin: 6px 0 14px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .instance-demo-reset {
+        width: 100%;
+        min-height: 34px;
+        padding: 7px 10px;
+        border: 1px solid var(--line-strong);
+        border-radius: 6px;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .instance-demo-reset:hover,
+      .instance-demo-reset:focus-visible {
+        border-color: var(--green);
+        background: var(--green);
+        color: #fff;
+      }
+
+      .instance-demo-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+        max-height: 340px;
+        margin-top: 12px;
+        padding-right: 3px;
+        overflow-y: auto;
+      }
+
+      .instance-demo-button {
+        min-height: 31px;
+        padding: 6px 5px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+        font-size: 11px;
+        cursor: pointer;
+      }
+
+      .instance-demo-button:hover,
+      .instance-demo-button:focus-visible {
+        border-color: var(--green);
+      }
+
+      .instance-demo-button.is-hidden {
+        border-color: var(--green);
+        background: var(--green);
+        color: #fff;
+      }
+
+      .instance-demo-fallback {
+        padding: 20px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
       .method-stages {
         margin-top: 42px;
         display: grid;
@@ -724,6 +880,14 @@
         .render-carousel-toolbar {
           align-items: flex-start;
           flex-direction: column;
+        }
+
+        .instance-demo-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .instance-demo-controls {
+          order: -1;
         }
 
         .render-experiment-head {
@@ -1029,6 +1193,34 @@
               in red.
             </figcaption>
           </figure>
+
+          <div class="instance-demo" aria-label="Interactive instance Gaussian demo">
+            <div class="instance-demo-head">
+              <h3>Interactive Instance Removal</h3>
+              <p>
+                The scene is rendered in the browser as an interactive Gaussian point view.
+                Click an instance to hide or restore its 3D Gaussians, and drag the scene to orbit.
+              </p>
+            </div>
+            <div class="instance-demo-layout">
+              <div class="instance-demo-viewer">
+                <div class="instance-demo-canvas-shell">
+                  <canvas
+                    id="instance-demo-canvas"
+                    aria-label="Interactive 3D Gaussian scene for ScanNet++ scene 0a76e06478"
+                  ></canvas>
+                  <span class="instance-demo-status" id="instance-demo-status" aria-live="polite">Loading scene...</span>
+                </div>
+                <p class="instance-demo-help">Drag to orbit · scroll to zoom · hidden instances are shown in green buttons.</p>
+              </div>
+              <aside class="instance-demo-controls">
+                <h4>Instances</h4>
+                <p>Click a button to hide or restore one instance.</p>
+                <button class="instance-demo-reset" id="instance-demo-reset" type="button">Show all instances</button>
+                <div class="instance-demo-buttons" id="instance-demo-buttons" role="group" aria-label="Instance visibility controls"></div>
+              </aside>
+            </div>
+          </div>
 
           <div class="render-carousel" aria-label="ScanNet++ novel-view rendering scenes">
             <div class="render-carousel-toolbar">
@@ -1484,6 +1676,236 @@
           updateCarousel(0, "auto");
         }
       });
+    </script>
+    <script type="module">
+      (async () => {
+        const canvas = document.getElementById("instance-demo-canvas");
+        const shell = document.querySelector(".instance-demo-canvas-shell");
+        const status = document.getElementById("instance-demo-status");
+        const buttonPanel = document.getElementById("instance-demo-buttons");
+        const resetButton = document.getElementById("instance-demo-reset");
+        if (!canvas || !shell || !status || !buttonPanel || !resetButton) {
+          return;
+        }
+
+        const showFallback = (message) => {
+          status.textContent = message;
+          const fallback = document.createElement("p");
+          fallback.className = "instance-demo-fallback";
+          fallback.textContent = message;
+          shell.replaceWith(fallback);
+        };
+
+        try {
+          const THREE = await import("https://esm.sh/three@0.160.0");
+          const { OrbitControls } = await import(
+            "https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js"
+          );
+
+          const response = await fetch(
+            "assets/instance-demo/scannetpp_0a76e06478.bin"
+          );
+          if (!response.ok) {
+            throw new Error(`Scene data request failed: ${response.status}`);
+          }
+          const buffer = await response.arrayBuffer();
+          const view = new DataView(buffer);
+          const magic = new TextDecoder().decode(new Uint8Array(buffer, 0, 8));
+          if (!magic.startsWith("ISGSv1")) {
+            throw new Error("Unsupported instance Gaussian data format");
+          }
+
+          const count = view.getUint32(8, true);
+          const numLabels = view.getUint32(12, true);
+          let offset = 16;
+          const positions = new Float32Array(buffer, offset, count * 3);
+          offset += count * 3 * 4;
+          const colors = new Uint8Array(buffer, offset, count * 3);
+          offset += count * 3;
+          offset = (offset + 3) & ~3;
+          const radii = new Float32Array(buffer, offset, count);
+          offset += count * 4;
+          const opacities = new Uint8Array(buffer, offset, count);
+          offset += count;
+          const labels = new Uint8Array(buffer, offset, count);
+
+          const pointPositions = new Float32Array(positions);
+          const bounds = new THREE.Box3();
+          const point = new THREE.Vector3();
+          for (let index = 0; index < count; index += 1) {
+            point.set(
+              pointPositions[index * 3],
+              pointPositions[index * 3 + 1],
+              pointPositions[index * 3 + 2],
+            );
+            bounds.expandByPoint(point);
+          }
+          const center = bounds.getCenter(new THREE.Vector3());
+          for (let index = 0; index < count; index += 1) {
+            pointPositions[index * 3] -= center.x;
+            pointPositions[index * 3 + 1] -= center.y;
+            pointPositions[index * 3 + 2] -= center.z;
+          }
+
+          const visibility = new Float32Array(count);
+          visibility.fill(1);
+          const hiddenLabels = new Set();
+
+          const scene = new THREE.Scene();
+          scene.background = new THREE.Color(0x111716);
+          const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
+          camera.position.set(0, 0.2, 2.35);
+          const renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: true,
+            alpha: false,
+          });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+          renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+          const controls = new OrbitControls(camera, canvas);
+          controls.enableDamping = true;
+          controls.dampingFactor = 0.08;
+          controls.minDistance = 0.7;
+          controls.maxDistance = 7;
+          controls.target.set(0, 0, 0);
+
+          const geometry = new THREE.BufferGeometry();
+          geometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(pointPositions, 3),
+          );
+          geometry.setAttribute(
+            "aColor",
+            new THREE.BufferAttribute(colors, 3, true),
+          );
+          geometry.setAttribute(
+            "aRadius",
+            new THREE.BufferAttribute(radii, 1),
+          );
+          geometry.setAttribute(
+            "aOpacity",
+            new THREE.BufferAttribute(
+              Float32Array.from(opacities, (value) => value / 255),
+              1,
+            ),
+          );
+          geometry.setAttribute(
+            "aVisible",
+            new THREE.BufferAttribute(visibility, 1),
+          );
+
+          const material = new THREE.ShaderMaterial({
+            uniforms: {
+              uPointScale: { value: 1750 },
+            },
+            vertexShader: `
+              attribute vec3 aColor;
+              attribute float aRadius;
+              attribute float aOpacity;
+              attribute float aVisible;
+              varying vec3 vColor;
+              varying float vOpacity;
+              uniform float uPointScale;
+
+              void main() {
+                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                vColor = aColor;
+                vOpacity = aOpacity;
+                float pointSize = aRadius * uPointScale / max(-mvPosition.z, 0.1);
+                gl_PointSize = aVisible > 0.5 ? clamp(pointSize, 1.0, 14.0) : 0.0;
+                gl_Position = projectionMatrix * mvPosition;
+              }
+            `,
+            fragmentShader: `
+              varying vec3 vColor;
+              varying float vOpacity;
+
+              void main() {
+                float distanceToCenter = length(gl_PointCoord - vec2(0.5));
+                if (distanceToCenter > 0.5) discard;
+                float edgeAlpha = 1.0 - smoothstep(0.28, 0.5, distanceToCenter);
+                gl_FragColor = vec4(vColor, edgeAlpha * vOpacity);
+              }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.NormalBlending,
+          });
+
+          const points = new THREE.Points(geometry, material);
+          scene.add(points);
+
+          const resize = () => {
+            const width = Math.max(1, shell.clientWidth);
+            const height = Math.max(1, shell.clientHeight);
+            renderer.setSize(width, height, false);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+          };
+          const resizeObserver = new ResizeObserver(resize);
+          resizeObserver.observe(shell);
+          resize();
+
+          const updateVisibility = () => {
+            visibility.fill(1);
+            if (hiddenLabels.size > 0) {
+              for (let index = 0; index < count; index += 1) {
+                if (hiddenLabels.has(labels[index])) {
+                  visibility[index] = 0;
+                }
+              }
+            }
+            geometry.getAttribute("aVisible").needsUpdate = true;
+            status.textContent = `${count.toLocaleString()} Gaussians · ${hiddenLabels.size} hidden`;
+            buttonPanel.querySelectorAll("button[data-label]").forEach((button) => {
+              button.classList.toggle(
+                "is-hidden",
+                hiddenLabels.has(Number(button.dataset.label)),
+              );
+              button.setAttribute(
+                "aria-pressed",
+                String(hiddenLabels.has(Number(button.dataset.label))),
+              );
+            });
+          };
+
+          for (let label = 0; label < numLabels; label += 1) {
+            const button = document.createElement("button");
+            button.className = "instance-demo-button";
+            button.type = "button";
+            button.dataset.label = String(label);
+            button.textContent = `Instance ${label + 1}`;
+            button.setAttribute("aria-pressed", "false");
+            button.title = `Toggle Gaussian instance label ${String(label).padStart(4, "0")}`;
+            button.addEventListener("click", () => {
+              if (hiddenLabels.has(label)) {
+                hiddenLabels.delete(label);
+              } else {
+                hiddenLabels.add(label);
+              }
+              updateVisibility();
+            });
+            buttonPanel.appendChild(button);
+          }
+
+          resetButton.addEventListener("click", () => {
+            hiddenLabels.clear();
+            updateVisibility();
+          });
+          updateVisibility();
+
+          const animate = () => {
+            controls.update();
+            renderer.render(scene, camera);
+            window.requestAnimationFrame(animate);
+          };
+          animate();
+        } catch (error) {
+          console.error("Interactive instance demo failed", error);
+          showFallback("Interactive scene data could not be loaded in this browser.");
+        }
+      })();
     </script>
   </body>
 </html>
