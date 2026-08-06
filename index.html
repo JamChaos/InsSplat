@@ -5,246 +5,816 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="InstanceSplat project page. Public release materials are being prepared."
+      content="InstanceSplat is an instance-aware feed-forward 3D Gaussian Splatting framework for reconstruction and scene understanding from pose-free multi-view images."
     />
-    <meta name="theme-color" content="#f4f5f1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:title" content="InstanceSplat" />
+    <meta
+      property="og:description"
+      content="Instance-Aware Feed-Forward 3D Gaussian Splatting for Scene Understanding"
+    />
+    <meta property="og:image" content="assets/teaser.webp" />
+    <meta property="og:type" content="website" />
     <title>InstanceSplat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         color-scheme: light;
-        --paper: #f4f5f1;
-        --ink: #111512;
-        --muted: #5d665f;
-        --line: #cbd0ca;
-        --signal: #18794e;
-        --accent: #e4543e;
+        --paper: #ffffff;
+        --surface: #ffffff;
+        --ink: #363636;
+        --muted: #6b6b6b;
+        --line: #e5e5e5;
+        --line-strong: #d2d2d2;
+        --blue: #4f94cf;
+        --green: #2c7b5c;
+        --coral: #b64d3a;
+        --code: #363636;
+        --max-width: 960px;
       }
 
       * {
         box-sizing: border-box;
       }
 
-      html,
-      body {
-        min-height: 100%;
-        margin: 0;
+      html {
+        scroll-behavior: smooth;
       }
 
       body {
+        min-width: 320px;
+        margin: 0;
         background: var(--paper);
         color: var(--ink);
-        font-family:
-          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
+        font-family: "Noto Sans", sans-serif;
         letter-spacing: 0;
       }
 
-      .shell {
-        min-height: 100vh;
-        display: grid;
-        grid-template-rows: auto 1fr auto;
+      a {
+        color: inherit;
       }
 
-      header,
-      footer {
-        width: min(1180px, calc(100% - 48px));
+      img {
+        display: block;
+        height: auto;
+        max-width: 100%;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .container {
+        width: min(var(--max-width), calc(100% - 48px));
         margin: 0 auto;
       }
 
-      header {
+      .site-header {
+        display: none;
+      }
+
+      .nav-shell {
+        min-height: 68px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 76px;
-        border-bottom: 1px solid var(--line);
+        gap: 28px;
       }
 
       .wordmark {
-        margin: 0;
-        font-size: 15px;
-        font-weight: 760;
+        flex: 0 0 auto;
+        text-decoration: none;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 19px;
+        font-weight: 700;
       }
 
-      .status {
-        display: inline-flex;
+      .site-nav {
+        display: flex;
         align-items: center;
-        gap: 9px;
+        gap: 28px;
         color: var(--muted);
         font-size: 13px;
+        font-weight: 650;
       }
 
-      .status::before {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--signal);
-        content: "";
+      .site-nav a {
+        padding: 8px 0;
+        text-decoration: none;
       }
 
-      main {
-        width: min(1180px, calc(100% - 48px));
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-        align-items: center;
-        gap: clamp(44px, 8vw, 120px);
-        padding: 72px 0 88px;
+      .site-nav a:hover,
+      .site-nav a:focus-visible {
+        color: var(--ink);
       }
 
-      .eyebrow {
-        margin: 0 0 20px;
-        color: var(--signal);
-        font-size: 13px;
-        font-weight: 720;
+      .hero {
+        padding: 46px 0 16px;
+        text-align: center;
+      }
+
+      .kicker,
+      .section-kicker {
+        margin: 0;
+        color: var(--green);
+        font-size: 12px;
+        font-weight: 760;
         text-transform: uppercase;
       }
 
       h1 {
-        max-width: 760px;
         margin: 0;
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 76px;
-        font-weight: 500;
-        line-height: 0.98;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: clamp(36px, 4.8vw, 48px);
+        font-weight: 700;
+        line-height: 1.15;
         overflow-wrap: anywhere;
       }
 
-      .lede {
-        max-width: 620px;
-        margin: 28px 0 0;
+      .subtitle {
+        max-width: 900px;
+        margin: 16px auto 0;
+        font-family: "Noto Sans", sans-serif;
+        font-size: 22px;
+        line-height: 1.45;
+      }
+
+      .authors {
+        margin: 16px 0 0;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .author-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px 12px;
+      }
+
+      .author-name {
+        color: var(--ink);
+        font-weight: 670;
+      }
+
+      .author-name sup {
+        margin-left: 2px;
         color: var(--muted);
-        font-size: 18px;
-        line-height: 1.65;
+        font-size: 10px;
       }
 
-      .field {
-        position: relative;
-        min-height: 380px;
-        overflow: hidden;
-        border-left: 1px solid var(--line);
-      }
-
-      .axis {
-        position: absolute;
-        inset: 22px 0 22px 34px;
-        border-bottom: 1px solid var(--line);
-        border-left: 1px solid var(--line);
-      }
-
-      .point {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--ink);
-      }
-
-      .point:nth-child(2) { left: 18%; top: 66%; }
-      .point:nth-child(3) { left: 31%; top: 48%; background: var(--signal); }
-      .point:nth-child(4) { left: 43%; top: 58%; }
-      .point:nth-child(5) { left: 55%; top: 32%; background: var(--accent); }
-      .point:nth-child(6) { left: 68%; top: 45%; }
-      .point:nth-child(7) { left: 78%; top: 22%; background: var(--signal); }
-      .point:nth-child(8) { left: 86%; top: 35%; }
-      .point:nth-child(9) { left: 48%; top: 75%; background: var(--accent); }
-
-      .field-label {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        margin: 0;
+      .affiliations {
+        max-width: 920px;
+        margin: 8px auto 0;
         color: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .affiliations span {
+        display: inline-block;
+        margin: 0 8px;
+      }
+
+      .corresponding-note {
+        margin: 5px 0 0;
+        color: var(--muted);
         font-size: 11px;
       }
 
-      footer {
+      .actions {
         display: flex;
-        justify-content: space-between;
-        gap: 24px;
-        padding: 24px 0 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .action,
+      .copy-button {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 10px 18px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 720;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .action.secondary {
+        border-color: var(--line-strong);
+        background: transparent;
+        color: var(--ink);
+      }
+
+      .action:hover,
+      .copy-button:hover {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+      }
+
+      .action:focus-visible,
+      .copy-button:focus-visible,
+      .site-nav a:focus-visible,
+      .wordmark:focus-visible,
+      .footer-links a:focus-visible {
+        outline: 3px solid rgba(36, 94, 138, 0.3);
+        outline-offset: 3px;
+      }
+
+      .icon {
+        width: 16px;
+        height: 16px;
+        stroke-width: 1.9;
+      }
+
+      .hero-figure {
+        max-width: 780px;
+        margin: 24px auto 0;
         border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .hero-caption {
+        max-width: 780px;
+        margin: 14px auto 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+        text-align: justify;
+        text-justify: inter-word;
+      }
+
+      .tldr {
+        max-width: 960px;
+        margin: 42px auto 0;
+        font-family: "Noto Sans", sans-serif;
+        font-size: 20px;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      .tldr-label {
+        margin-right: 10px;
+        color: var(--green);
+        font-family: "Noto Sans", sans-serif;
+        font-size: 12px;
+        font-weight: 780;
+        text-transform: uppercase;
+      }
+
+      .hero-figure img {
+        width: 100%;
+        aspect-ratio: 2448 / 1108;
+        object-fit: contain;
+      }
+
+      figcaption {
+        padding: 14px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+        text-align: justify;
+        text-justify: inter-word;
+      }
+
+      .section {
+        padding: 40px 0;
+        scroll-margin-top: 64px;
+      }
+
+      .section + .section {
+        border-top: 1px solid var(--line);
+      }
+
+      #abstract {
+        background: #f6f6f6;
+      }
+
+      .section-heading {
+        max-width: 760px;
+        margin: 0 auto;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      .abstract-layout {
+        max-width: 763px;
+      }
+
+      .abstract-copy {
+        margin-top: 30px;
+        font-family: "Noto Sans", sans-serif;
+        font-size: 16px;
+        line-height: 1.65;
+        text-align: justify;
+        text-justify: inter-word;
+      }
+
+      .abstract-copy p {
+        margin: 0;
+      }
+
+      .method-figure {
+        margin: 36px 0 0;
+      }
+
+      .method-figure img {
+        width: 100%;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .method-figure img {
+        aspect-ratio: 3764 / 881;
+        object-fit: contain;
+      }
+
+      .method-stages {
+        margin-top: 42px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .stage {
+        padding: 24px 30px 0 0;
+      }
+
+      .stage + .stage {
+        padding-left: 30px;
+        border-left: 1px solid var(--line);
+      }
+
+      .stage-number {
+        color: var(--coral);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .stage h3 {
+        margin: 12px 0 0;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .stage p {
+        margin: 13px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.65;
+        text-align: justify;
+        text-justify: inter-word;
+      }
+
+      .citation-section {
+        background: #fff;
+        color: var(--ink);
+      }
+
+      .citation-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 30px;
+      }
+
+      .citation-section .section-heading {
+        color: var(--ink);
+      }
+
+      .copy-button {
+        flex: 0 0 auto;
+        border-color: var(--line-strong);
+        background: transparent;
+        color: var(--ink);
+      }
+
+      pre {
+        margin: 28px 0 0;
+        padding: 22px 24px;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #f6f6f6;
+        color: var(--ink);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.65;
+      }
+
+      .site-footer {
+        background: #fff;
+      }
+
+      .footer-shell {
+        min-height: 104px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 28px;
         color: var(--muted);
         font-size: 12px;
       }
 
-      footer p {
+      .footer-shell p {
         margin: 0;
       }
 
-      @media (max-width: 760px) {
-        header,
-        footer,
-        main {
-          width: min(100% - 32px, 620px);
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+      }
+
+      .footer-links a {
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+      }
+
+      @media (max-width: 820px) {
+        .container {
+          width: min(100% - 32px, 680px);
         }
 
-        header {
-          min-height: 66px;
+        .site-nav {
+          max-width: 66vw;
+          gap: 18px;
+          overflow-x: auto;
+          scrollbar-width: none;
         }
 
-        main {
+        .site-nav::-webkit-scrollbar {
+          display: none;
+        }
+
+        .hero {
+          padding: 44px 0 16px;
+        }
+
+        .hero-figure {
+          margin-top: 30px;
+        }
+
+        .section {
+          padding: 36px 0;
+        }
+
+        .method-stages {
           grid-template-columns: 1fr;
-          gap: 44px;
-          padding: 56px 0 64px;
+        }
+
+        .stage,
+        .stage + .stage {
+          padding: 22px 0;
+          border-left: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .stage:last-child {
+          border-bottom: 0;
+        }
+
+        .citation-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .footer-shell {
+          align-items: flex-start;
+          flex-direction: column;
+          justify-content: center;
+          padding: 28px 0;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .nav-shell {
+          min-height: 62px;
+        }
+
+        .site-nav {
+          gap: 15px;
+          font-size: 12px;
+        }
+
+        .site-nav a:nth-child(3) {
+          display: none;
+        }
+
+        .hero {
+          padding-top: 38px;
         }
 
         h1 {
-          font-size: 52px;
+          font-size: 36px;
         }
 
-        .lede {
+        .subtitle {
+          font-size: 18px;
+        }
+
+        .actions {
+          display: flex;
+        }
+
+        .action {
+          min-width: 150px;
+        }
+
+        .section-heading {
+          font-size: 28px;
+        }
+
+        .abstract-copy {
           font-size: 16px;
         }
 
-        .field {
-          min-height: 240px;
-          border-left: 0;
-          border-top: 1px solid var(--line);
+        .method-figure {
+          margin-top: 34px;
+          overflow-x: auto;
         }
 
-        footer {
-          flex-direction: column;
-          gap: 8px;
+        .method-figure img {
+          width: 860px;
+          max-width: none;
+        }
+
+        pre {
+          font-size: 11px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
         }
       }
     </style>
+    <script
+      src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"
+      defer
+    ></script>
   </head>
   <body>
-    <div class="shell">
-      <header>
-        <p class="wordmark">InstanceSplat</p>
-        <span class="status">Project page online</span>
-      </header>
+    <header class="site-header">
+      <div class="container nav-shell">
+        <a class="wordmark" href="#">InstanceSplat</a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#abstract">Abstract</a>
+          <a href="#method">Method</a>
+          <a href="#citation">Citation</a>
+        </nav>
+      </div>
+    </header>
 
-      <main>
-        <section aria-labelledby="project-title">
-          <p class="eyebrow">Research project</p>
-          <h1 id="project-title">InstanceSplat</h1>
-          <p class="lede">
-            Project materials, results, and the public code release are being
-            prepared.
+    <main id="top">
+      <section class="container hero" aria-labelledby="project-title">
+        <h1 id="project-title">InstanceSplat</h1>
+        <p class="subtitle">
+          Instance-Aware Feed-Forward 3D Gaussian Splatting for Scene
+          Understanding
+        </p>
+        <div class="authors">
+          <div class="author-list">
+            <span class="author-name">Minchao Jiang<sup>1,2</sup></span>
+            <span class="author-name">Xiaoxuan Ma<sup>3</sup></span>
+            <span class="author-name">Shunyu Jia<sup>4</sup></span>
+            <span class="author-name">Haoru Wang<sup>5</sup></span>
+            <span class="author-name">Zhang Liang<sup>4</sup></span>
+            <span class="author-name">Wentao Zhu<sup>2,*</sup></span>
+          </div>
+          <p class="affiliations">
+            <span><sup>1</sup> Shanghai Jiao Tong University</span>
+            <span><sup>2</sup> Eastern Institute of Technology, Ningbo</span>
+            <span><sup>3</sup> Carnegie Mellon University</span>
+            <br />
+            <span><sup>4</sup> Xidian University</span>
+            <span><sup>5</sup> Peking University</span>
           </p>
-        </section>
-
-        <div class="field" aria-label="Abstract point field">
-          <div class="axis"></div>
-          <span class="point"></span>
-          <span class="point"></span>
-          <span class="point"></span>
-          <span class="point"></span>
-          <span class="point"></span>
-          <span class="point"></span>
-          <span class="point"></span>
-          <span class="point"></span>
-          <p class="field-label">PUBLIC RELEASE / IN PREPARATION</p>
+          <p class="corresponding-note"><sup>*</sup> Corresponding author</p>
         </div>
-      </main>
+        <div class="actions" aria-label="Project resources">
+          <a
+            class="action secondary"
+            href="https://arxiv.org/abs/0000.00000"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="icon" data-lucide="file-text" aria-hidden="true"></i>
+            arXiv
+          </a>
+          <a
+            class="action"
+            href="https://github.com/JamChaos/InsSplat"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="icon" data-lucide="github" aria-hidden="true"></i>
+            Code
+          </a>
+        </div>
 
-      <footer>
-        <p>InstanceSplat</p>
-        <p>Project page hosted on GitHub Pages</p>
-      </footer>
-    </div>
+        <p class="tldr">
+          <span class="tldr-label">TL;DR</span>
+          We propose an instance-aware feed-forward 3DGS method.
+        </p>
+
+        <figure class="hero-figure">
+          <img
+            src="assets/teaser.webp"
+            width="2448"
+            height="1108"
+            alt="InstanceSplat takes pose-free multi-view images and produces an instance-aware 3D Gaussian representation for reconstruction, instance segmentation, and open-vocabulary scene understanding."
+            fetchpriority="high"
+          />
+        </figure>
+        <p class="hero-caption">
+          Given pose-free multi-view images (a), InstanceSplat jointly predicts
+          explicit 3D Gaussians with compact instance and open-vocabulary
+          semantic features (b). Shared 3D geometry provides cross-view
+          consistency, while instance cues enhance boundary-aware 3DGS
+          reconstruction and semantic coherence. The resulting representation
+          supports novel-view synthesis (NVS), instance segmentation, and
+          open-vocabulary scene understanding (c).
+        </p>
+      </section>
+
+      <section id="abstract" class="section">
+        <div class="container abstract-layout">
+          <div>
+            <h2 class="section-heading">Abstract</h2>
+          </div>
+          <div class="abstract-copy">
+            <p>
+              Feed-forward 3D Gaussian Splatting (3DGS) enables efficient and
+              generalizable 3D reconstruction, but current feed-forward 3DGS
+              methods for scene understanding remain largely category-oriented.
+              In contrast, instance-aware 3DGS methods typically rely on
+              per-scene optimization and often decouple reconstruction from
+              instance and semantic learning, limiting reciprocal interactions
+              among them.
+              We present InstanceSplat, a unified feed-forward 3DGS framework
+              for generalizable 3D reconstruction and instance-aware scene
+              understanding from pose-free multi-view images. In a single
+              forward pass, InstanceSplat constructs an instance-aware Gaussian
+              representation that jointly encodes appearance, geometry, instance
+              identity, and language-aligned semantics. Shared 3D Gaussians
+              ground instance identities across views, producing renderable and
+              cross-view-consistent instance features.
+              To allow reconstruction and scene understanding to benefit from
+              each other, we further design an instance-centric learning strategy
+              that connects reconstruction, instance learning, and semantic
+              learning through shared instance structure. Specifically, instance
+              cues guide reconstruction, language-aligned semantics strengthen
+              the discrimination of confusing same-category instances, and
+              instance regions aggregate semantic evidence into coherent
+              object-level predictions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="method" class="section">
+        <div class="container">
+          <h2 class="section-heading">Method</h2>
+
+          <figure class="method-figure">
+            <img
+              src="assets/pipeline.webp"
+              width="3764"
+              height="881"
+              alt="Overview of the InstanceSplat architecture, including the feed-forward backbone, 3D-consistent instance grounding, and instance-centric coupling."
+              loading="lazy"
+            />
+            <figcaption>
+              Given pose-free multi-view images, the feed-forward backbone
+              constructs an instance-aware Gaussian representation.
+              3D-consistent grounding and instance-centric coupling then connect
+              reconstruction with instance and semantic learning.
+            </figcaption>
+          </figure>
+
+          <div class="method-stages">
+            <article class="stage">
+              <span class="stage-number">01</span>
+              <h3>Instance-Aware Gaussian Representation</h3>
+              <p>
+                Each Gaussian carries appearance, geometry, an 8-dimensional
+                instance embedding, and a compact language-aligned semantic
+                feature. Confidence-aware voxelization merges redundant
+                primitives while preserving this shared structure.
+              </p>
+            </article>
+            <article class="stage">
+              <span class="stage-number">02</span>
+              <h3>3D-Consistent Instance Grounding</h3>
+              <p>
+                Differentiable feature rendering supervises shared Gaussians in
+                image space. Prototype-based contrastive learning promotes
+                compact instances, separates different objects, and aligns
+                identities across views.
+              </p>
+            </article>
+            <article class="stage">
+              <span class="stage-number">03</span>
+              <h3>Instance-Centric Coupling</h3>
+              <p>
+                Instance boundaries guide reconstruction, semantic similarity
+                emphasizes confusing same-category objects, and predicted
+                instance regions aggregate semantic evidence into coherent
+                object-level labels.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="citation" class="section citation-section">
+        <div class="container">
+          <div class="citation-head">
+            <div>
+              <p class="section-kicker">Reference</p>
+              <h2 class="section-heading">Citation</h2>
+            </div>
+            <button class="copy-button" id="copy-bibtex" type="button">
+              <i class="icon" data-lucide="copy" aria-hidden="true"></i>
+              <span>Copy BibTeX</span>
+            </button>
+          </div>
+          <pre id="bibtex"><code>@misc{instancesplat2027,
+  title  = {InstanceSplat: Instance-Aware Feed-Forward 3D Gaussian
+            Splatting for Scene Understanding},
+  author = {Minchao Jiang and Xiaoxuan Ma and Shunyu Jia and Haoru Wang
+            and Zhang Liang and Wentao Zhu},
+  year   = {2026}
+}</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-shell">
+        <p>InstanceSplat &middot; Project page</p>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="https://github.com/JamChaos/InsSplat">Code</a>
+          <a href="#">Back to top</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+
+        const copyButton = document.getElementById("copy-bibtex");
+        const buttonLabel = copyButton.querySelector("span");
+        const bibtex = document.getElementById("bibtex").innerText;
+
+        copyButton.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(bibtex);
+          } catch (error) {
+            const textarea = document.createElement("textarea");
+            textarea.value = bibtex;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            textarea.remove();
+          }
+
+          buttonLabel.textContent = "Copied";
+          window.setTimeout(() => {
+            buttonLabel.textContent = "Copy BibTeX";
+          }, 1600);
+        });
+      });
+    </script>
   </body>
 </html>
