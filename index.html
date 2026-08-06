@@ -307,6 +307,10 @@
         background: #f6f6f6;
       }
 
+      .localization-section {
+        background: #f6f6f6;
+      }
+
       .section-heading {
         max-width: 760px;
         margin: 0 auto;
@@ -347,6 +351,34 @@
       .method-figure img {
         aspect-ratio: 3764 / 881;
         object-fit: contain;
+      }
+
+      .localization-copy {
+        max-width: 620px;
+        margin: 22px auto 0;
+        font-size: 16px;
+        line-height: 1.65;
+        text-align: left;
+      }
+
+      .localization-figure {
+        max-width: 620px;
+        margin: 24px auto 0;
+      }
+
+      .experiment-subheading {
+        margin: 20px auto 0;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+        text-align: center;
+      }
+
+      .localization-figure img {
+        width: 100%;
+        border: 1px solid var(--line);
+        background: #fff;
       }
 
       .method-stages {
@@ -749,6 +781,31 @@
               </p>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section id="instance-localization" class="section localization-section">
+        <div class="container">
+          <h2 class="section-heading">Experiment</h2>
+          <h3 class="experiment-subheading">Open-Vocabulary Instance-Level 3D Localization</h3>
+          <p class="localization-copy">
+            Text queries match semantic prototypes to clustered 3D Gaussian groups,
+            which are highlighted in red.
+          </p>
+          <figure class="localization-figure">
+            <img
+              src="assets/instance-localization.webp"
+              width="2658"
+              height="2425"
+              alt="Open-vocabulary instance-level 3D localization results. Text queries identify complete Gaussian groups highlighted in red across several reconstructed indoor scenes."
+              loading="lazy"
+            />
+            <figcaption>
+              Open-vocabulary instance-level 3D localization on ScanNet. Text
+              queries retrieve the corresponding 3D Gaussian groups, highlighted
+              in red.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
