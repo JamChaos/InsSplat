@@ -381,6 +381,74 @@
         background: #fff;
       }
 
+      .render-experiment {
+        margin: 58px auto 0;
+        padding-top: 34px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .render-experiment-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .render-experiment-head h3 {
+        margin: 0;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .render-experiment-head p {
+        margin: 0;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+      }
+
+      .render-grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .render-card {
+        min-width: 0;
+        margin: 0;
+      }
+
+      .render-card video {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 1px solid var(--line);
+        background: #202522;
+        object-fit: cover;
+      }
+
+      .render-card figcaption {
+        margin-top: 11px;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .render-card figcaption strong {
+        display: block;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .render-card figcaption span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+      }
+
       .method-stages {
         margin-top: 42px;
         display: grid;
@@ -518,6 +586,17 @@
           grid-template-columns: 1fr;
         }
 
+        .render-grid {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+
+        .render-experiment-head {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+        }
+
         .stage,
         .stage + .stage {
           padding: 22px 0;
@@ -589,6 +668,10 @@
           overflow-x: auto;
         }
 
+        .render-experiment-head h3 {
+          font-size: 21px;
+        }
+
         .method-figure img {
           width: 860px;
           max-width: none;
@@ -617,6 +700,7 @@
         <nav class="site-nav" aria-label="Primary navigation">
           <a href="#abstract">Abstract</a>
           <a href="#method">Method</a>
+          <a href="#instance-localization">Experiments</a>
           <a href="#citation">Citation</a>
         </nav>
       </div>
@@ -806,6 +890,63 @@
               in red.
             </figcaption>
           </figure>
+
+          <div class="render-experiment">
+            <div class="render-experiment-head">
+              <h3>Novel-View Rendering</h3>
+              <p>ScanNet scene 0687</p>
+            </div>
+            <div class="render-grid">
+              <figure class="render-card">
+                <video
+                  src="assets/experiments/scene0687-rgb.mp4"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  controls
+                  preload="metadata"
+                  aria-label="RGB novel-view rendering for ScanNet scene 0687"
+                ></video>
+                <figcaption>
+                  <strong>RGB</strong>
+                  <span>Rendered appearance from novel camera views.</span>
+                </figcaption>
+              </figure>
+              <figure class="render-card">
+                <video
+                  src="assets/experiments/scene0687-depth.mp4"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  controls
+                  preload="metadata"
+                  aria-label="Depth novel-view rendering for ScanNet scene 0687"
+                ></video>
+                <figcaption>
+                  <strong>Depth</strong>
+                  <span>Predicted geometry rendered along the same view path.</span>
+                </figcaption>
+              </figure>
+              <figure class="render-card">
+                <video
+                  src="assets/experiments/scene0687-instance-features.mp4"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  controls
+                  preload="metadata"
+                  aria-label="Instance feature rendering for ScanNet scene 0687"
+                ></video>
+                <figcaption>
+                  <strong>Instance features</strong>
+                  <span>PCA visualization of the rendered instance embedding.</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
       </section>
 
