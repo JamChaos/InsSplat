@@ -413,6 +413,28 @@
         font-size: 12px;
       }
 
+      .sync-button {
+        flex: 0 0 auto;
+        min-height: 34px;
+        margin-left: auto;
+        padding: 7px 13px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .sync-button:hover,
+      .sync-button:focus-visible {
+        border-color: var(--green);
+        background: var(--green);
+        color: #fff;
+      }
+
       .render-grid {
         margin-top: 24px;
         display: grid;
@@ -898,117 +920,6 @@
           <div class="render-experiment">
             <div class="render-experiment-head">
               <h3>Novel-View Rendering</h3>
-              <p>ScanNet scene 0687</p>
-            </div>
-            <div class="render-grid">
-              <figure class="render-card">
-                <video
-                  src="assets/experiments/scene0687-rgb.mp4"
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  aria-label="RGB novel-view rendering for ScanNet scene 0687"
-                ></video>
-                <figcaption>
-                  <strong>RGB</strong>
-                  <span>Rendered appearance from novel camera views.</span>
-                </figcaption>
-              </figure>
-              <figure class="render-card">
-                <video
-                  src="assets/experiments/scene0687-depth.mp4"
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  aria-label="Depth novel-view rendering for ScanNet scene 0687"
-                ></video>
-                <figcaption>
-                  <strong>Depth</strong>
-                  <span>Predicted geometry rendered along the same view path.</span>
-                </figcaption>
-              </figure>
-              <figure class="render-card">
-                <video
-                  src="assets/experiments/scene0687-instance-features.mp4"
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  aria-label="Instance feature rendering for ScanNet scene 0687"
-                ></video>
-                <figcaption>
-                  <strong>Instance features</strong>
-                  <span>PCA visualization of the rendered instance embedding.</span>
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="render-experiment">
-            <div class="render-experiment-head">
-              <h3>Novel-View Rendering</h3>
-              <p>ScanNet scene 0686</p>
-            </div>
-            <div class="render-grid">
-              <figure class="render-card">
-                <video
-                  src="assets/experiments/scene0686-rgb.mp4"
-                  muted
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  aria-label="RGB novel-view rendering for ScanNet scene 0686"
-                ></video>
-                <figcaption>
-                  <strong>RGB</strong>
-                  <span>Rendered appearance from novel camera views.</span>
-                </figcaption>
-              </figure>
-              <figure class="render-card">
-                <video
-                  src="assets/experiments/scene0686-depth.mp4"
-                  muted
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  aria-label="Depth novel-view rendering for ScanNet scene 0686"
-                ></video>
-                <figcaption>
-                  <strong>Depth</strong>
-                  <span>Predicted geometry rendered along the same view path.</span>
-                </figcaption>
-              </figure>
-              <figure class="render-card">
-                <video
-                  src="assets/experiments/scene0686-instance-features.mp4"
-                  muted
-                  loop
-                  playsinline
-                  controls
-                  preload="metadata"
-                  aria-label="Instance feature rendering for ScanNet scene 0686"
-                ></video>
-                <figcaption>
-                  <strong>Instance features</strong>
-                  <span>PCA visualization of the rendered instance embedding.</span>
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="render-experiment">
-            <div class="render-experiment-head">
-              <h3>Novel-View Rendering</h3>
               <p>ScanNet++ scene 0b0bb941b7</p>
             </div>
             <div class="render-grid">
@@ -1285,6 +1196,59 @@
           window.setTimeout(() => {
             buttonLabel.textContent = "Copy BibTeX";
           }, 1600);
+        });
+
+        document.querySelectorAll(".render-experiment").forEach((experiment) => {
+          const videos = [...experiment.querySelectorAll("video")];
+          const heading = experiment.querySelector(".render-experiment-head");
+          if (!heading || videos.length !== 3) {
+            return;
+          }
+
+          const syncButton = document.createElement("button");
+          syncButton.className = "sync-button";
+          syncButton.type = "button";
+          syncButton.textContent = "Play scene";
+          syncButton.setAttribute("aria-pressed", "false");
+          heading.appendChild(syncButton);
+
+          const updateButton = (isPlaying) => {
+            syncButton.textContent = isPlaying ? "Pause scene" : "Play scene";
+            syncButton.setAttribute("aria-pressed", String(isPlaying));
+          };
+
+          syncButton.addEventListener("click", async () => {
+            const shouldPlay = videos.some((video) => video.paused);
+            if (!shouldPlay) {
+              videos.forEach((video) => video.pause());
+              updateButton(false);
+              return;
+            }
+
+            const alignedTime = Math.max(
+              ...videos.map((video) => Number.isFinite(video.currentTime)
+                ? video.currentTime
+                : 0),
+            );
+            videos.forEach((video) => {
+              if (Math.abs(video.currentTime - alignedTime) > 0.05) {
+                video.currentTime = alignedTime;
+              }
+            });
+
+            const results = await Promise.allSettled(
+              videos.map((video) => video.play()),
+            );
+            updateButton(results.every((result) => result.status === "fulfilled"));
+          });
+
+          videos.forEach((video) => {
+            video.addEventListener("pause", () => {
+              if (videos.every((item) => item.paused)) {
+                updateButton(false);
+              }
+            });
+          });
         });
       });
     </script>
