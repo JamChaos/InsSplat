@@ -391,6 +391,110 @@
         margin-top: 46px;
       }
 
+      .render-carousel {
+        margin: 58px auto 0;
+        padding-top: 34px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .render-carousel-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .render-carousel-title h3 {
+        margin: 0;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .render-carousel-hint {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .render-carousel-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 0 0 auto;
+      }
+
+      .carousel-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border: 1px solid var(--line-strong);
+        border-radius: 50%;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .carousel-button:hover,
+      .carousel-button:focus-visible {
+        border-color: var(--green);
+        background: var(--green);
+        color: #fff;
+      }
+
+      .carousel-button:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+
+      .render-carousel-status {
+        min-width: 48px;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .render-carousel-viewport {
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+      }
+
+      .render-carousel-viewport::-webkit-scrollbar {
+        display: none;
+      }
+
+      .render-carousel-track {
+        display: flex;
+        width: 100%;
+      }
+
+      .render-carousel-track > .render-experiment {
+        flex: 0 0 100%;
+        min-width: 100%;
+        margin: 0;
+        padding-top: 0;
+        border-top: 0;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      .render-carousel-track > .render-experiment + .render-experiment {
+        margin-top: 0;
+      }
+
       .render-experiment-head {
         display: flex;
         align-items: baseline;
@@ -617,6 +721,11 @@
           gap: 28px;
         }
 
+        .render-carousel-toolbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
         .render-experiment-head {
           align-items: flex-start;
           flex-direction: column;
@@ -695,6 +804,10 @@
         }
 
         .render-experiment-head h3 {
+          font-size: 21px;
+        }
+
+        .render-carousel-title h3 {
           font-size: 21px;
         }
 
@@ -917,9 +1030,22 @@
             </figcaption>
           </figure>
 
+          <div class="render-carousel" aria-label="ScanNet++ novel-view rendering scenes">
+            <div class="render-carousel-toolbar">
+              <div class="render-carousel-title">
+                <h3>Novel-View Rendering</h3>
+                <p class="render-carousel-hint">Swipe left or right to compare scenes.</p>
+              </div>
+              <div class="render-carousel-controls" aria-label="Scene carousel controls">
+                <button class="carousel-button carousel-button-prev" type="button" aria-label="Previous scene">&#8592;</button>
+                <span class="render-carousel-status" aria-live="polite">1 / 5</span>
+                <button class="carousel-button carousel-button-next" type="button" aria-label="Next scene">&#8594;</button>
+              </div>
+            </div>
+            <div class="render-carousel-viewport">
+              <div class="render-carousel-track">
           <div class="render-experiment">
             <div class="render-experiment-head">
-              <h3>Novel-View Rendering</h3>
               <p>ScanNet++ scene 0a76e06478</p>
             </div>
             <div class="render-grid">
@@ -1182,6 +1308,9 @@
               </figure>
             </div>
           </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1300,6 +1429,60 @@
             });
           });
         });
+
+        const carousel = document.querySelector(".render-carousel");
+        if (carousel) {
+          const viewport = carousel.querySelector(".render-carousel-viewport");
+          const slides = [...carousel.querySelectorAll(".render-carousel-track > .render-experiment")];
+          const previousButton = carousel.querySelector(".carousel-button-prev");
+          const nextButton = carousel.querySelector(".carousel-button-next");
+          const status = carousel.querySelector(".render-carousel-status");
+          let activeIndex = 0;
+          let scrollTimer;
+
+          const updateCarousel = (nextIndex, behavior = "smooth") => {
+            activeIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
+            viewport.scrollTo({
+              left: activeIndex * viewport.clientWidth,
+              behavior,
+            });
+            previousButton.disabled = activeIndex === 0;
+            nextButton.disabled = activeIndex === slides.length - 1;
+            status.textContent = `${activeIndex + 1} / ${slides.length}`;
+
+            slides.forEach((slide, index) => {
+              if (index !== activeIndex) {
+                slide.querySelectorAll("video").forEach((video) => video.pause());
+              }
+            });
+          };
+
+          const updateFromScroll = () => {
+            const index = Math.round(viewport.scrollLeft / viewport.clientWidth);
+            if (index !== activeIndex) {
+              updateCarousel(index, "auto");
+            }
+          };
+
+          previousButton.addEventListener("click", () => {
+            updateCarousel(activeIndex - 1);
+          });
+
+          nextButton.addEventListener("click", () => {
+            updateCarousel(activeIndex + 1);
+          });
+
+          viewport.addEventListener("scroll", () => {
+            window.clearTimeout(scrollTimer);
+            scrollTimer = window.setTimeout(updateFromScroll, 80);
+          }, { passive: true });
+
+          window.addEventListener("resize", () => {
+            updateCarousel(activeIndex, "auto");
+          });
+
+          updateCarousel(0, "auto");
+        }
       });
     </script>
   </body>
