@@ -14,12 +14,7 @@
   "removed_gaussians": 9901,
   "excluded_unlabeled_noise": 14620,
   "split_source_label": 0,
-  "split_method": "deterministic PCA-axis k-means (k=2)",
-  "split_axis_xyz": [
-    0.25809988379478455,
-    0.7329697012901306,
-    -0.6293964385986328
-  ],
+  "split_method": "spatial two-remote split from batch144_idx0_split_remote/instances",
   "instances": [
     {
       "id": 0,
@@ -27,11 +22,11 @@
       "file": "instances/instance_00_remote_0.ply",
       "source_label": 0,
       "split_component": 0,
-      "num_gaussians": 1758,
+      "num_gaussians": 1804,
       "center_xyz": [
-        0.028792257551280308,
-        -0.2188004677918177,
-        0.8248852101134494
+        0.05454097137561361,
+        -0.1876410684752755,
+        0.797183045262508
       ]
     },
     {
@@ -40,11 +35,11 @@
       "file": "instances/instance_01_remote_1.ply",
       "source_label": 0,
       "split_component": 1,
-      "num_gaussians": 1911,
+      "num_gaussians": 1865,
       "center_xyz": [
-        0.03626729382310442,
-        -0.17387793981579822,
-        0.7859817003155802
+        0.011545133999729952,
+        -0.2029101757837045,
+        0.8118182386214228
       ]
     },
     {
@@ -191,5 +186,5 @@
       ]
     }
   ],
-  "renderer_note": "Each instance file preserves the original 17-float 3DGS PLY record."
+  "renderer_note": "The two remote files use the 14-float 3DGS layout exported in batch144_idx0_split_remote/instances; the other instance files preserve the original 17-float layout."
 }
