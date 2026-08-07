@@ -1834,7 +1834,16 @@
           });
 
           const points = new THREE.Points(geometry, material);
-          scene.add(points);
+
+          // ScanNet++ scene coordinates are Z-up, while Three.js uses Y-up.
+          // Rotate the complete point cloud so the floor is horizontal and
+          // appears below the scene in the initial browser view. Keeping the
+          // rotation on a parent group preserves the per-point instance
+          // visibility controls and OrbitControls target.
+          const pointCloud = new THREE.Group();
+          pointCloud.rotation.x = -Math.PI / 2;
+          pointCloud.add(points);
+          scene.add(pointCloud);
 
           const resize = () => {
             const width = Math.max(1, shell.clientWidth);
