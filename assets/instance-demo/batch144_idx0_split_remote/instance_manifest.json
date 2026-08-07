@@ -1,0 +1,195 @@
+{
+  "scene": "batch144_idx0_split_remote",
+  "source_scene": "batch144_idx0",
+  "source_gaussians": "/code/AnySplat/outputs/nvs/batch144_idx0/3dgsply/gaussians.ply",
+  "source_valid_cluster_color": "/code/AnySplat/outputs/nvs/batch144_idx0/ply/gaussians_valid_cluster_color.ply",
+  "source_num_gaussians": 315890,
+  "source_valid_gaussians": 301270,
+  "num_gaussians_after_removed_labels": 291369,
+  "removed_source_labels": [
+    9,
+    13,
+    14
+  ],
+  "removed_gaussians": 9901,
+  "excluded_unlabeled_noise": 14620,
+  "split_source_label": 0,
+  "split_method": "deterministic PCA-axis k-means (k=2)",
+  "split_axis_xyz": [
+    0.25809988379478455,
+    0.7329697012901306,
+    -0.6293964385986328
+  ],
+  "instances": [
+    {
+      "id": 0,
+      "name": "instance_00_remote_0",
+      "file": "instances/instance_00_remote_0.ply",
+      "source_label": 0,
+      "split_component": 0,
+      "num_gaussians": 1758,
+      "center_xyz": [
+        0.028792257551280308,
+        -0.2188004677918177,
+        0.8248852101134494
+      ]
+    },
+    {
+      "id": 1,
+      "name": "instance_01_remote_1",
+      "file": "instances/instance_01_remote_1.ply",
+      "source_label": 0,
+      "split_component": 1,
+      "num_gaussians": 1911,
+      "center_xyz": [
+        0.03626729382310442,
+        -0.17387793981579822,
+        0.7859817003155802
+      ]
+    },
+    {
+      "id": 2,
+      "name": "instance_02_label_0001",
+      "file": "instances/instance_02_label_0001.ply",
+      "source_label": 1,
+      "split_component": null,
+      "num_gaussians": 6246,
+      "center_xyz": [
+        -0.1571229249238968,
+        -0.32239413261413574,
+        0.8459877371788025
+      ]
+    },
+    {
+      "id": 3,
+      "name": "instance_03_label_0002",
+      "file": "instances/instance_03_label_0002.ply",
+      "source_label": 2,
+      "split_component": null,
+      "num_gaussians": 5487,
+      "center_xyz": [
+        -0.26903223991394043,
+        -0.24044710397720337,
+        0.7905666828155518
+      ]
+    },
+    {
+      "id": 4,
+      "name": "instance_04_label_0003",
+      "file": "instances/instance_04_label_0003.ply",
+      "source_label": 3,
+      "split_component": null,
+      "num_gaussians": 42949,
+      "center_xyz": [
+        0.2544303238391876,
+        -0.06649700552225113,
+        1.0043599605560303
+      ]
+    },
+    {
+      "id": 5,
+      "name": "instance_05_label_0004",
+      "file": "instances/instance_05_label_0004.ply",
+      "source_label": 4,
+      "split_component": null,
+      "num_gaussians": 74474,
+      "center_xyz": [
+        -0.10659147799015045,
+        -0.06014113873243332,
+        0.8851560354232788
+      ]
+    },
+    {
+      "id": 6,
+      "name": "instance_06_label_0005",
+      "file": "instances/instance_06_label_0005.ply",
+      "source_label": 5,
+      "split_component": null,
+      "num_gaussians": 2748,
+      "center_xyz": [
+        -0.3451377749443054,
+        -0.28110364079475403,
+        0.8316444158554077
+      ]
+    },
+    {
+      "id": 7,
+      "name": "instance_07_label_0006",
+      "file": "instances/instance_07_label_0006.ply",
+      "source_label": 6,
+      "split_component": null,
+      "num_gaussians": 8015,
+      "center_xyz": [
+        0.013831552118062973,
+        -0.35010626912117004,
+        0.8962299227714539
+      ]
+    },
+    {
+      "id": 8,
+      "name": "instance_08_label_0007",
+      "file": "instances/instance_08_label_0007.ply",
+      "source_label": 7,
+      "split_component": null,
+      "num_gaussians": 46164,
+      "center_xyz": [
+        0.24544601142406464,
+        -0.22269980609416962,
+        0.9846177697181702
+      ]
+    },
+    {
+      "id": 9,
+      "name": "instance_09_label_0008",
+      "file": "instances/instance_09_label_0008.ply",
+      "source_label": 8,
+      "split_component": null,
+      "num_gaussians": 957,
+      "center_xyz": [
+        -0.293365478515625,
+        0.18074549734592438,
+        1.1030874252319336
+      ]
+    },
+    {
+      "id": 10,
+      "name": "instance_10_label_0010",
+      "file": "instances/instance_10_label_0010.ply",
+      "source_label": 10,
+      "split_component": null,
+      "num_gaussians": 814,
+      "center_xyz": [
+        -0.04397934302687645,
+        0.26748356223106384,
+        1.04932701587677
+      ]
+    },
+    {
+      "id": 11,
+      "name": "instance_11_label_0011",
+      "file": "instances/instance_11_label_0011.ply",
+      "source_label": 11,
+      "split_component": null,
+      "num_gaussians": 14352,
+      "center_xyz": [
+        0.15155820548534393,
+        0.20915129780769348,
+        1.0728176832199097
+      ]
+    },
+    {
+      "id": 12,
+      "name": "instance_12_label_0012",
+      "file": "instances/instance_12_label_0012.ply",
+      "source_label": 12,
+      "split_component": null,
+      "num_gaussians": 85494,
+      "center_xyz": [
+        -0.03141512721776962,
+        0.2654774487018585,
+        1.052648663520813
+      ]
+    }
+  ],
+  "renderer_note": "Each instance file preserves the original 17-float 3DGS PLY record."
+}

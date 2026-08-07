@@ -372,7 +372,17 @@
         font-size: 24px;
         font-weight: 700;
         line-height: 1.25;
-        text-align: left;
+        text-align: center;
+      }
+
+      .localization-experiment {
+        margin-top: 58px;
+        padding-top: 34px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .localization-experiment .experiment-subheading {
+        margin-top: 0;
       }
 
       .localization-figure img {
@@ -616,19 +626,27 @@
       .instance-demo-canvas-shell {
         position: relative;
         overflow: hidden;
+        min-height: 520px;
         aspect-ratio: 1 / 1;
         border: 1px solid var(--line-strong);
         background: #111716;
       }
 
-      #instance-demo-canvas {
+      #instance-demo-mount {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        touch-action: none;
+      }
+
+      #instance-demo-mount canvas {
         display: block;
         width: 100%;
         height: 100%;
         cursor: grab;
       }
 
-      #instance-demo-canvas:active {
+      #instance-demo-mount canvas:active {
         cursor: grabbing;
       }
 
@@ -720,6 +738,11 @@
       .instance-demo-button:hover,
       .instance-demo-button:focus-visible {
         border-color: var(--green);
+      }
+
+      .instance-demo-button:disabled {
+        opacity: 0.45;
+        cursor: wait;
       }
 
       .instance-demo-button.is-hidden {
@@ -890,6 +913,10 @@
           order: -1;
         }
 
+        .instance-demo-canvas-shell {
+          min-height: 400px;
+        }
+
         .render-experiment-head {
           align-items: flex-start;
           flex-direction: column;
@@ -921,6 +948,10 @@
       }
 
       @media (max-width: 520px) {
+        .instance-demo-canvas-shell {
+          min-height: 320px;
+        }
+
         .nav-shell {
           min-height: 62px;
         }
@@ -1174,54 +1205,6 @@
       <section id="instance-localization" class="section localization-section">
         <div class="container">
           <h2 class="section-heading">Experiment</h2>
-          <h3 class="experiment-subheading">Open-Vocabulary Instance-Level 3D Localization</h3>
-          <p class="localization-copy">
-            Text queries match semantic prototypes to clustered 3D Gaussian groups,
-            which are highlighted in red.
-          </p>
-          <figure class="localization-figure">
-            <img
-              src="assets/instance-localization.webp"
-              width="2658"
-              height="2425"
-              alt="Open-vocabulary instance-level 3D localization results. Text queries identify complete Gaussian groups highlighted in red across several reconstructed indoor scenes."
-              loading="lazy"
-            />
-            <figcaption>
-              Open-vocabulary instance-level 3D localization on ScanNet. Text
-              queries retrieve the corresponding 3D Gaussian groups, highlighted
-              in red.
-            </figcaption>
-          </figure>
-
-          <div class="instance-demo" aria-label="Interactive instance Gaussian demo">
-            <div class="instance-demo-head">
-              <h3>Interactive Instance Removal</h3>
-              <p>
-                The scene is rendered in the browser as an interactive Gaussian point view.
-                Click an instance to hide or restore its 3D Gaussians, and drag the scene to orbit.
-              </p>
-            </div>
-            <div class="instance-demo-layout">
-              <div class="instance-demo-viewer">
-                <div class="instance-demo-canvas-shell">
-                  <canvas
-                    id="instance-demo-canvas"
-                    aria-label="Interactive 3D Gaussian scene for ScanNet++ scene 0a76e06478"
-                  ></canvas>
-                  <span class="instance-demo-status" id="instance-demo-status" aria-live="polite">Loading scene...</span>
-                </div>
-                <p class="instance-demo-help">Drag to orbit · scroll to zoom · hidden instances are shown in green buttons.</p>
-              </div>
-              <aside class="instance-demo-controls">
-                <h4>Instances</h4>
-                <p>Click a button to hide or restore one instance.</p>
-                <button class="instance-demo-reset" id="instance-demo-reset" type="button">Show all instances</button>
-                <div class="instance-demo-buttons" id="instance-demo-buttons" role="group" aria-label="Instance visibility controls"></div>
-              </aside>
-            </div>
-          </div>
-
           <div class="render-carousel" aria-label="ScanNet++ novel-view rendering scenes">
             <div class="render-carousel-toolbar">
               <div class="render-carousel-title">
@@ -1503,6 +1486,56 @@
               </div>
             </div>
           </div>
+
+          <div class="instance-demo" aria-label="Interactive instance Gaussian demo">
+            <div class="instance-demo-head">
+              <h3>Interactive Instance Removal</h3>
+              <p>
+                This browser viewer renders the complete 3D Gaussian splat scene without downsampling.
+                Click an instance to hide or restore its full Gaussian group, and drag the scene to orbit.
+              </p>
+            </div>
+            <div class="instance-demo-layout">
+              <div class="instance-demo-viewer">
+                <div class="instance-demo-canvas-shell">
+                  <div
+                    id="instance-demo-mount"
+                    aria-label="Interactive full Gaussian splat scene with 13 instance groups"
+                  ></div>
+                  <span class="instance-demo-status" id="instance-demo-status" aria-live="polite">Loading full Gaussian scene...</span>
+                </div>
+                <p class="instance-demo-help">Drag to orbit · scroll to zoom · click an instance button to hide or restore that complete Gaussian group.</p>
+              </div>
+              <aside class="instance-demo-controls">
+                <h4>Instances</h4>
+                <p>Each button toggles one independently loaded Gaussian instance.</p>
+                <button class="instance-demo-reset" id="instance-demo-reset" type="button">Show all instances</button>
+                <div class="instance-demo-buttons" id="instance-demo-buttons" role="group" aria-label="Instance visibility controls"></div>
+              </aside>
+            </div>
+          </div>
+
+          <div class="localization-experiment">
+            <h3 class="experiment-subheading">Open-Vocabulary Instance-Level 3D Localization</h3>
+            <p class="localization-copy">
+              Text queries match semantic prototypes to clustered 3D Gaussian groups,
+              which are highlighted in red.
+            </p>
+            <figure class="localization-figure">
+              <img
+                src="assets/instance-localization.webp"
+                width="2658"
+                height="2425"
+                alt="Open-vocabulary instance-level 3D localization results. Text queries identify complete Gaussian groups highlighted in red across several reconstructed indoor scenes."
+                loading="lazy"
+              />
+              <figcaption>
+                Open-vocabulary instance-level 3D localization on ScanNet. Text
+                queries retrieve the corresponding 3D Gaussian groups, highlighted
+                in red.
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
@@ -1677,242 +1710,165 @@
         }
       });
     </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "@mkkellogg/gaussian-splats-3d": "https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d@0.4.7/build/gaussian-splats-3d.module.js"
+        }
+      }
+    </script>
     <script type="module">
       (async () => {
-        const canvas = document.getElementById("instance-demo-canvas");
+        const mount = document.getElementById("instance-demo-mount");
         const shell = document.querySelector(".instance-demo-canvas-shell");
         const status = document.getElementById("instance-demo-status");
         const buttonPanel = document.getElementById("instance-demo-buttons");
         const resetButton = document.getElementById("instance-demo-reset");
-        if (!canvas || !shell || !status || !buttonPanel || !resetButton) {
+        if (!mount || !shell || !status || !buttonPanel || !resetButton) {
           return;
         }
+
+        const sceneBase = "assets/instance-demo/batch144_idx0_split_remote/";
+        const hiddenScenes = new Set();
+        let viewer = null;
+        let manifest = null;
 
         const showFallback = (message) => {
           status.textContent = message;
           const fallback = document.createElement("p");
           fallback.className = "instance-demo-fallback";
           fallback.textContent = message;
-          shell.replaceWith(fallback);
+          mount.replaceChildren(fallback);
+        };
+
+        const instanceName = (item, index) => {
+          if (item.source_label === 0 && Number.isInteger(item.split_component)) {
+            return "Remote " + (item.split_component + 1);
+          }
+          return "Instance " + String(index + 1).padStart(2, "0");
+        };
+
+        const updateVisibilityUI = () => {
+          if (!manifest) {
+            return;
+          }
+          const totalGaussians = manifest.num_gaussians_after_removed_labels;
+          const visibleCount = manifest.instances.length - hiddenScenes.size;
+          status.textContent =
+            totalGaussians.toLocaleString() +
+            " full Gaussians · " +
+            visibleCount +
+            " / " +
+            manifest.instances.length +
+            " instances visible";
+
+          buttonPanel.querySelectorAll("button[data-scene-index]").forEach((button) => {
+            const sceneIndex = Number(button.dataset.sceneIndex);
+            const hidden = hiddenScenes.has(sceneIndex);
+            button.classList.toggle("is-hidden", hidden);
+            button.setAttribute("aria-pressed", String(hidden));
+            button.title = (hidden ? "Show " : "Hide ") + button.dataset.instanceName;
+          });
         };
 
         try {
-          const THREE = await import("https://esm.sh/three@0.160.0");
-          const { OrbitControls } = await import(
-            "https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js"
-          );
-
-          const response = await fetch(
-            "assets/instance-demo/scannetpp_0a76e06478.bin"
-          );
-          if (!response.ok) {
-            throw new Error(`Scene data request failed: ${response.status}`);
-          }
-          const buffer = await response.arrayBuffer();
-          const view = new DataView(buffer);
-          const magic = new TextDecoder().decode(new Uint8Array(buffer, 0, 8));
-          if (!magic.startsWith("ISGSv1")) {
-            throw new Error("Unsupported instance Gaussian data format");
+          const [GaussianSplats3D, manifestResponse] = await Promise.all([
+            import("@mkkellogg/gaussian-splats-3d"),
+            fetch(sceneBase + "instance_manifest.json"),
+          ]);
+          if (!manifestResponse.ok) {
+            throw new Error("Instance manifest request failed: " + manifestResponse.status);
           }
 
-          const count = view.getUint32(8, true);
-          const numLabels = view.getUint32(12, true);
-          let offset = 16;
-          const positions = new Float32Array(buffer, offset, count * 3);
-          offset += count * 3 * 4;
-          const colors = new Uint8Array(buffer, offset, count * 3);
-          offset += count * 3;
-          offset = (offset + 3) & ~3;
-          const radii = new Float32Array(buffer, offset, count);
-          offset += count * 4;
-          const opacities = new Uint8Array(buffer, offset, count);
-          offset += count;
-          const labels = new Uint8Array(buffer, offset, count);
-
-          const pointPositions = new Float32Array(positions);
-          const bounds = new THREE.Box3();
-          const point = new THREE.Vector3();
-          for (let index = 0; index < count; index += 1) {
-            point.set(
-              pointPositions[index * 3],
-              pointPositions[index * 3 + 1],
-              pointPositions[index * 3 + 2],
-            );
-            bounds.expandByPoint(point);
-          }
-          const center = bounds.getCenter(new THREE.Vector3());
-          for (let index = 0; index < count; index += 1) {
-            pointPositions[index * 3] -= center.x;
-            pointPositions[index * 3 + 1] -= center.y;
-            pointPositions[index * 3 + 2] -= center.z;
+          manifest = await manifestResponse.json();
+          if (!Array.isArray(manifest.instances) || manifest.instances.length !== 13) {
+            throw new Error("Expected 13 Gaussian instance files");
           }
 
-          const visibility = new Float32Array(count);
-          visibility.fill(1);
-          const hiddenLabels = new Set();
-
-          const scene = new THREE.Scene();
-          scene.background = new THREE.Color(0x111716);
-          const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
-          camera.position.set(0, 0.2, 2.35);
-          const renderer = new THREE.WebGLRenderer({
-            canvas,
-            antialias: true,
-            alpha: false,
-          });
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-          renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-          const controls = new OrbitControls(camera, canvas);
-          controls.enableDamping = true;
-          controls.dampingFactor = 0.08;
-          controls.minDistance = 0.7;
-          controls.maxDistance = 7;
-          controls.target.set(0, 0, 0);
-
-          const geometry = new THREE.BufferGeometry();
-          geometry.setAttribute(
-            "position",
-            new THREE.BufferAttribute(pointPositions, 3),
-          );
-          geometry.setAttribute(
-            "aColor",
-            new THREE.BufferAttribute(colors, 3, true),
-          );
-          geometry.setAttribute(
-            "aRadius",
-            new THREE.BufferAttribute(radii, 1),
-          );
-          geometry.setAttribute(
-            "aOpacity",
-            new THREE.BufferAttribute(
-              Float32Array.from(opacities, (value) => value / 255),
-              1,
-            ),
-          );
-          geometry.setAttribute(
-            "aVisible",
-            new THREE.BufferAttribute(visibility, 1),
-          );
-
-          const material = new THREE.ShaderMaterial({
-            uniforms: {
-              uPointScale: { value: 1750 },
-            },
-            vertexShader: `
-              attribute vec3 aColor;
-              attribute float aRadius;
-              attribute float aOpacity;
-              attribute float aVisible;
-              varying vec3 vColor;
-              varying float vOpacity;
-              uniform float uPointScale;
-
-              void main() {
-                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                vColor = aColor;
-                vOpacity = aOpacity;
-                float pointSize = aRadius * uPointScale / max(-mvPosition.z, 0.1);
-                gl_PointSize = aVisible > 0.5 ? clamp(pointSize, 1.0, 14.0) : 0.0;
-                gl_Position = projectionMatrix * mvPosition;
-              }
-            `,
-            fragmentShader: `
-              varying vec3 vColor;
-              varying float vOpacity;
-
-              void main() {
-                float distanceToCenter = length(gl_PointCoord - vec2(0.5));
-                if (distanceToCenter > 0.5) discard;
-                float edgeAlpha = 1.0 - smoothstep(0.28, 0.5, distanceToCenter);
-                gl_FragColor = vec4(vColor, edgeAlpha * vOpacity);
-              }
-            `,
-            transparent: true,
-            depthWrite: false,
-            blending: THREE.NormalBlending,
+          viewer = new GaussianSplats3D.Viewer({
+            rootElement: mount,
+            sharedMemoryForWorkers: false,
+            dynamicScene: true,
+            useBuiltInControls: true,
+            cameraUp: [0, 0, 1],
+            initialCameraPosition: [1.12, -1.18, 1.72],
+            initialCameraLookAt: [0.008, -0.042, 0.942],
+            sphericalHarmonicsDegree: 0,
+            enableOptionalEffects: true,
+            antialiased: false,
           });
 
-          const points = new THREE.Points(geometry, material);
-
-          // ScanNet++ scene coordinates are Z-up, while Three.js uses Y-up.
-          // Rotate the complete point cloud so the floor is horizontal and
-          // appears below the scene in the initial browser view. Keeping the
-          // rotation on a parent group preserves the per-point instance
-          // visibility controls and OrbitControls target.
-          const pointCloud = new THREE.Group();
-          pointCloud.rotation.x = -Math.PI / 2;
-          pointCloud.add(points);
-          scene.add(pointCloud);
-
-          const resize = () => {
-            const width = Math.max(1, shell.clientWidth);
-            const height = Math.max(1, shell.clientHeight);
-            renderer.setSize(width, height, false);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-          };
-          const resizeObserver = new ResizeObserver(resize);
-          resizeObserver.observe(shell);
-          resize();
-
-          const updateVisibility = () => {
-            visibility.fill(1);
-            if (hiddenLabels.size > 0) {
-              for (let index = 0; index < count; index += 1) {
-                if (hiddenLabels.has(labels[index])) {
-                  visibility[index] = 0;
-                }
-              }
-            }
-            geometry.getAttribute("aVisible").needsUpdate = true;
-            status.textContent = `${count.toLocaleString()} Gaussians · ${hiddenLabels.size} hidden`;
-            buttonPanel.querySelectorAll("button[data-label]").forEach((button) => {
-              button.classList.toggle(
-                "is-hidden",
-                hiddenLabels.has(Number(button.dataset.label)),
-              );
-              button.setAttribute(
-                "aria-pressed",
-                String(hiddenLabels.has(Number(button.dataset.label))),
-              );
-            });
-          };
-
-          for (let label = 0; label < numLabels; label += 1) {
+          manifest.instances.forEach((item, index) => {
+            const label = instanceName(item, index);
             const button = document.createElement("button");
             button.className = "instance-demo-button";
             button.type = "button";
-            button.dataset.label = String(label);
-            button.textContent = `Instance ${label + 1}`;
+            button.disabled = true;
+            button.dataset.sceneIndex = String(index);
+            button.dataset.instanceName = label;
+            button.textContent = label;
             button.setAttribute("aria-pressed", "false");
-            button.title = `Toggle Gaussian instance label ${String(label).padStart(4, "0")}`;
+            button.title = "Loading " + label;
             button.addEventListener("click", () => {
-              if (hiddenLabels.has(label)) {
-                hiddenLabels.delete(label);
-              } else {
-                hiddenLabels.add(label);
+              const splatScene = viewer.getSplatScene(index);
+              if (!splatScene) {
+                return;
               }
-              updateVisibility();
+              const shouldHide = !hiddenScenes.has(index);
+              splatScene.visible = !shouldHide;
+              if (shouldHide) {
+                hiddenScenes.add(index);
+              } else {
+                hiddenScenes.delete(index);
+              }
+              updateVisibilityUI();
             });
             buttonPanel.appendChild(button);
-          }
-
-          resetButton.addEventListener("click", () => {
-            hiddenLabels.clear();
-            updateVisibility();
           });
-          updateVisibility();
 
-          const animate = () => {
-            controls.update();
-            renderer.render(scene, camera);
-            window.requestAnimationFrame(animate);
-          };
-          animate();
+          const splatScenes = manifest.instances.map((item) => ({
+            path: sceneBase + item.file,
+            splatAlphaRemovalThreshold: 0,
+            progressiveLoad: false,
+          }));
+
+          await viewer.addSplatScenes(
+            splatScenes,
+            false,
+            (percent) => {
+              const progress = Number.isFinite(percent) ? Math.round(percent) : 0;
+              status.textContent = "Loading full Gaussian scene · " + progress + "%";
+            },
+          );
+          viewer.start();
+
+          buttonPanel.querySelectorAll("button").forEach((button) => {
+            button.disabled = false;
+          });
+          resetButton.addEventListener("click", () => {
+            manifest.instances.forEach((item, index) => {
+              const splatScene = viewer.getSplatScene(index);
+              if (splatScene) {
+                splatScene.visible = true;
+              }
+            });
+            hiddenScenes.clear();
+            updateVisibilityUI();
+          });
+          updateVisibilityUI();
+
+          window.addEventListener("pagehide", () => {
+            if (viewer) {
+              viewer.dispose();
+            }
+          }, { once: true });
         } catch (error) {
-          console.error("Interactive instance demo failed", error);
-          showFallback("Interactive scene data could not be loaded in this browser.");
+          console.error("Interactive Gaussian splat demo failed", error);
+          if (viewer) {
+            viewer.dispose();
+          }
+          showFallback("The full Gaussian splat scene could not be loaded in this browser.");
         }
       })();
     </script>
