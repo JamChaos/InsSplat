@@ -679,6 +679,39 @@
         line-height: 1.3;
       }
 
+      .instance-demo-scene-label {
+        display: block;
+        margin: 0 0 7px;
+        font-family: "Google Sans", "Noto Sans", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .instance-demo-scene-select {
+        width: 100%;
+        min-height: 36px;
+        padding: 7px 9px;
+        border: 1px solid var(--line-strong);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .instance-demo-scene-select:disabled {
+        opacity: 0.55;
+        cursor: wait;
+      }
+
+      .instance-demo-instance-heading {
+        margin-top: 17px !important;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
       .instance-demo-controls p {
         margin: 6px 0 14px;
         color: var(--muted);
@@ -705,6 +738,11 @@
         border-color: var(--green);
         background: var(--green);
         color: #fff;
+      }
+
+      .instance-demo-reset:disabled {
+        opacity: 0.45;
+        cursor: wait;
       }
 
       .instance-demo-buttons {
@@ -1492,14 +1530,19 @@
                 <div class="instance-demo-canvas-shell">
                   <div
                     id="instance-demo-mount"
-                    aria-label="Interactive full Gaussian splat scene with 13 instance groups"
+                    aria-label="Interactive full Gaussian splat scene with per-instance visibility controls"
                   ></div>
                   <span class="instance-demo-status" id="instance-demo-status" aria-live="polite">Loading full Gaussian scene...</span>
                 </div>
                 <p class="instance-demo-help">Drag to orbit · scroll to zoom · click an instance button to hide or restore that complete Gaussian group.</p>
               </div>
               <aside class="instance-demo-controls">
-                <h4>Instances</h4>
+                <label class="instance-demo-scene-label" for="instance-demo-scene-select">Scene</label>
+                <select class="instance-demo-scene-select" id="instance-demo-scene-select">
+                  <option value="batch144">Two remotes</option>
+                  <option value="scannetpp_0a7cc12c0e">ScanNet++ 0a7cc12c0e</option>
+                </select>
+                <h4 class="instance-demo-instance-heading">Instances</h4>
                 <p>Each button toggles one independently loaded Gaussian instance.</p>
                 <button class="instance-demo-reset" id="instance-demo-reset" type="button">Show all instances</button>
                 <div class="instance-demo-buttons" id="instance-demo-buttons" role="group" aria-label="Instance visibility controls"></div>
@@ -1717,29 +1760,55 @@
         const status = document.getElementById("instance-demo-status");
         const buttonPanel = document.getElementById("instance-demo-buttons");
         const resetButton = document.getElementById("instance-demo-reset");
-        if (!mount || !shell || !status || !buttonPanel || !resetButton) {
+        const sceneSelect = document.getElementById("instance-demo-scene-select");
+        if (!mount || !shell || !status || !buttonPanel || !resetButton || !sceneSelect) {
           return;
         }
 
-        const sceneBase = "assets/instance-demo/batch144_idx0_split_remote/";
-        // The network output is expressed in the first-view camera frame
-        // (X right, Y down, Z forward), rather than a gravity-aligned frame.
-        // This shared rigid transform maps the fitted floor normal to world +Z,
-        // centers the scene in X/Y, and places the floor at world Z = 0.
-        const sceneRotation = [
-          -0.9384464449790052,
-          -0.005858753484949367,
-          0,
-          0.3453750785940841,
-        ];
-        const scenePosition = [
-          -0.005405989571857617,
-          -0.6742805799413311,
-          0.9737374014503439,
-        ];
+        const sceneConfigs = {
+          batch144: {
+            label: "Two remotes",
+            base: "assets/instance-demo/batch144_idx0_split_remote/",
+            expectedInstances: 13,
+            rotation: [
+              -0.9384464449790052,
+              -0.005858753484949367,
+              0,
+              0.3453750785940841,
+            ],
+            position: [
+              -0.005405989571857617,
+              -0.6742805799413311,
+              0.9737374014503439,
+            ],
+            cameraPosition: [0, -1.45, 0.48],
+            cameraLookAt: [0, 0, 0.315],
+          },
+          scannetpp_0a7cc12c0e: {
+            label: "ScanNet++ 0a7cc12c0e",
+            base: "assets/instance-demo/scannetpp_0a7cc12c0e_merged/",
+            expectedInstances: 10,
+            rotation: [
+              -0.8392353773013319,
+              -0.04809429298599967,
+              0,
+              0.5416372591209622,
+            ],
+            position: [
+              -0.04568188414475627,
+              -1.0308439795983397,
+              0.6391752068094424,
+            ],
+            cameraPosition: [0, -2.35, 0.58],
+            cameraLookAt: [0, 0, 0.34],
+          },
+        };
+
         const hiddenScenes = new Set();
         let viewer = null;
         let manifest = null;
+        let currentConfig = null;
+        let viewerStarted = false;
 
         const showFallback = (message) => {
           status.textContent = message;
@@ -1753,18 +1822,36 @@
           if (item.source_label === 0 && Number.isInteger(item.split_component)) {
             return "Remote " + (item.split_component + 1);
           }
+          if (Array.isArray(item.source_labels)) {
+            if (item.source_labels.length > 1) {
+              return "Group " + item.source_labels.join("+");
+            }
+            return "Label " + item.source_labels[0];
+          }
           return "Instance " + String(index + 1).padStart(2, "0");
         };
 
+        const setCamera = (config) => {
+          viewer.camera.position.fromArray(config.cameraPosition);
+          viewer.camera.up.set(0, 0, 1);
+          if (viewer.controls) {
+            viewer.controls.target.fromArray(config.cameraLookAt);
+            viewer.controls.update();
+            viewer.camera.lookAt(viewer.controls.target);
+          }
+        };
+
         const updateVisibilityUI = () => {
-          if (!manifest) {
+          if (!manifest || !currentConfig) {
             return;
           }
           const totalGaussians = manifest.num_gaussians_after_removed_labels;
           const visibleCount = manifest.instances.length - hiddenScenes.size;
           status.textContent =
+            currentConfig.label +
+            " · " +
             totalGaussians.toLocaleString() +
-            " full Gaussians · " +
+            " Gaussians · " +
             visibleCount +
             " / " +
             manifest.instances.length +
@@ -1779,33 +1866,8 @@
           });
         };
 
-        try {
-          const [GaussianSplats3D, manifestResponse] = await Promise.all([
-            import("@mkkellogg/gaussian-splats-3d"),
-            fetch(sceneBase + "instance_manifest.json"),
-          ]);
-          if (!manifestResponse.ok) {
-            throw new Error("Instance manifest request failed: " + manifestResponse.status);
-          }
-
-          manifest = await manifestResponse.json();
-          if (!Array.isArray(manifest.instances) || manifest.instances.length !== 13) {
-            throw new Error("Expected 13 Gaussian instance files");
-          }
-
-          viewer = new GaussianSplats3D.Viewer({
-            rootElement: mount,
-            sharedMemoryForWorkers: false,
-            dynamicScene: true,
-            useBuiltInControls: true,
-            cameraUp: [0, 0, 1],
-            initialCameraPosition: [0, -1.45, 0.48],
-            initialCameraLookAt: [0, 0, 0.315],
-            sphericalHarmonicsDegree: 0,
-            enableOptionalEffects: true,
-            antialiased: false,
-          });
-
+        const buildInstanceButtons = () => {
+          buttonPanel.replaceChildren();
           manifest.instances.forEach((item, index) => {
             const label = instanceName(item, index);
             const button = document.createElement("button");
@@ -1833,29 +1895,114 @@
             });
             buttonPanel.appendChild(button);
           });
+        };
 
-          const splatScenes = manifest.instances.map((item) => ({
-            path: sceneBase + item.file,
-            splatAlphaRemovalThreshold: 0,
-            progressiveLoad: false,
-            rotation: sceneRotation,
-            position: scenePosition,
-          }));
+        const loadScene = async (sceneKey) => {
+          const config = sceneConfigs[sceneKey];
+          if (!config) {
+            return;
+          }
 
-          await viewer.addSplatScenes(
-            splatScenes,
-            false,
-            (percent) => {
-              const progress = Number.isFinite(percent) ? Math.round(percent) : 0;
-              status.textContent = "Loading full Gaussian scene · " + progress + "%";
-            },
-          );
-          viewer.start();
-
+          sceneSelect.disabled = true;
+          resetButton.disabled = true;
           buttonPanel.querySelectorAll("button").forEach((button) => {
-            button.disabled = false;
+            button.disabled = true;
           });
+          hiddenScenes.clear();
+          manifest = null;
+          currentConfig = config;
+          status.textContent = "Loading " + config.label + "...";
+
+          try {
+            const sceneCount = viewer.getSceneCount();
+            if (sceneCount > 0) {
+              status.textContent = "Switching to " + config.label + "...";
+              await viewer.removeSplatScenes(
+                Array.from({ length: sceneCount }, (item, index) => index),
+                false,
+              );
+            }
+
+            setCamera(config);
+            const manifestResponse = await fetch(
+              config.base + "instance_manifest.json",
+              { cache: "no-cache" },
+            );
+            if (!manifestResponse.ok) {
+              throw new Error(
+                "Instance manifest request failed: " + manifestResponse.status,
+              );
+            }
+
+            manifest = await manifestResponse.json();
+            if (
+              !Array.isArray(manifest.instances) ||
+              manifest.instances.length !== config.expectedInstances
+            ) {
+              throw new Error(
+                "Expected " + config.expectedInstances + " Gaussian instance files",
+              );
+            }
+            buildInstanceButtons();
+
+            const splatScenes = manifest.instances.map((item) => ({
+              path: config.base + item.file,
+              splatAlphaRemovalThreshold: 0,
+              progressiveLoad: false,
+              rotation: config.rotation,
+              position: config.position,
+            }));
+            await viewer.addSplatScenes(
+              splatScenes,
+              false,
+              (percent) => {
+                const progress = Number.isFinite(percent) ? Math.round(percent) : 0;
+                status.textContent =
+                  "Loading " + config.label + " · " + progress + "%";
+              },
+            );
+
+            setCamera(config);
+            if (!viewerStarted) {
+              viewer.start();
+              viewerStarted = true;
+            }
+            buttonPanel.querySelectorAll("button").forEach((button) => {
+              button.disabled = false;
+            });
+            resetButton.disabled = false;
+            sceneSelect.disabled = false;
+            updateVisibilityUI();
+          } catch (error) {
+            console.error("Interactive Gaussian splat scene failed", error);
+            status.textContent = config.label + " could not be loaded.";
+            sceneSelect.disabled = false;
+            resetButton.disabled = true;
+          }
+        };
+
+        try {
+          const GaussianSplats3D = await import(
+            "@mkkellogg/gaussian-splats-3d"
+          );
+          const initialConfig = sceneConfigs[sceneSelect.value];
+          viewer = new GaussianSplats3D.Viewer({
+            rootElement: mount,
+            sharedMemoryForWorkers: false,
+            dynamicScene: true,
+            useBuiltInControls: true,
+            cameraUp: [0, 0, 1],
+            initialCameraPosition: initialConfig.cameraPosition,
+            initialCameraLookAt: initialConfig.cameraLookAt,
+            sphericalHarmonicsDegree: 0,
+            enableOptionalEffects: true,
+            antialiased: false,
+          });
+
           resetButton.addEventListener("click", () => {
+            if (!manifest) {
+              return;
+            }
             manifest.instances.forEach((item, index) => {
               const splatScene = viewer.getSplatScene(index);
               if (splatScene) {
@@ -1865,19 +2012,20 @@
             hiddenScenes.clear();
             updateVisibilityUI();
           });
-          updateVisibilityUI();
 
+          sceneSelect.addEventListener("change", () => {
+            loadScene(sceneSelect.value);
+          });
+
+          await loadScene(sceneSelect.value);
           window.addEventListener("pagehide", () => {
             if (viewer) {
-              viewer.dispose();
+              viewer.stop();
             }
           }, { once: true });
         } catch (error) {
-          console.error("Interactive Gaussian splat demo failed", error);
-          if (viewer) {
-            viewer.dispose();
-          }
-          showFallback("The full Gaussian splat scene could not be loaded in this browser.");
+          console.error("Interactive Gaussian splat viewer failed", error);
+          showFallback("The full Gaussian splat viewer could not be loaded in this browser.");
         }
       })();
     </script>

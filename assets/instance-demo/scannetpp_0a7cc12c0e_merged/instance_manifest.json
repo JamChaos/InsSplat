@@ -1,0 +1,275 @@
+{
+  "scene": "scannetpp_0a7cc12c0e_merged",
+  "source_scene": "scannetpp_0a7cc12c0e",
+  "source_gaussians": "/code/AnySplat/outputs/nvs/scannetpp_0a7cc12c0e/3dgsply/gaussians.ply",
+  "source_valid_cluster_color": "/code/AnySplat/outputs/nvs/scannetpp_0a7cc12c0e/ply/gaussians_valid_cluster_color.ply",
+  "source_num_gaussians": 597969,
+  "source_valid_gaussians": 570638,
+  "num_gaussians_after_removed_labels": 570137,
+  "removed_source_labels": [
+    7
+  ],
+  "removed_gaussians": 501,
+  "excluded_unlabeled_noise": 27331,
+  "merge_groups": [
+    [
+      2,
+      11,
+      15
+    ],
+    [
+      8,
+      9,
+      10,
+      12
+    ]
+  ],
+  "instances": [
+    {
+      "id": 0,
+      "name": "instance_00_label_0000",
+      "file": "instances/instance_00_label_0000.ply",
+      "source_labels": [
+        0
+      ],
+      "num_gaussians": 11028,
+      "center_xyz": [
+        -0.5215981006622314,
+        0.07814045995473862,
+        0.7379893064498901
+      ],
+      "bounds_min_xyz": [
+        -0.6441295742988586,
+        -0.016523871570825577,
+        0.590822160243988
+      ],
+      "bounds_max_xyz": [
+        -0.38789504766464233,
+        0.1671200692653656,
+        0.9414054751396179
+      ]
+    },
+    {
+      "id": 1,
+      "name": "instance_01_label_0001",
+      "file": "instances/instance_01_label_0001.ply",
+      "source_labels": [
+        1
+      ],
+      "num_gaussians": 14630,
+      "center_xyz": [
+        0.44116508960723877,
+        -0.21988341212272644,
+        1.2928881645202637
+      ],
+      "bounds_min_xyz": [
+        0.22787941992282867,
+        -0.3381928503513336,
+        0.8932980895042419
+      ],
+      "bounds_max_xyz": [
+        0.7499024271965027,
+        -0.08434326201677322,
+        1.6174216270446777
+      ]
+    },
+    {
+      "id": 2,
+      "name": "instance_02_labels_0002_0011_0015",
+      "file": "instances/instance_02_labels_0002_0011_0015.ply",
+      "source_labels": [
+        2,
+        11,
+        15
+      ],
+      "num_gaussians": 9689,
+      "center_xyz": [
+        0.44762852787971497,
+        -0.04240921139717102,
+        1.4237911701202393
+      ],
+      "bounds_min_xyz": [
+        0.19825218617916107,
+        -0.17958635091781616,
+        0.7855930328369141
+      ],
+      "bounds_max_xyz": [
+        0.7882251143455505,
+        0.0633479580283165,
+        1.6691999435424805
+      ]
+    },
+    {
+      "id": 3,
+      "name": "instance_03_label_0003",
+      "file": "instances/instance_03_label_0003.ply",
+      "source_labels": [
+        3
+      ],
+      "num_gaussians": 11606,
+      "center_xyz": [
+        0.031683340668678284,
+        -0.28538811206817627,
+        1.1054434776306152
+      ],
+      "bounds_min_xyz": [
+        -0.03513564541935921,
+        -0.39733776450157166,
+        1.0517709255218506
+      ],
+      "bounds_max_xyz": [
+        0.1024671271443367,
+        -0.18864870071411133,
+        1.2558927536010742
+      ]
+    },
+    {
+      "id": 4,
+      "name": "instance_04_label_0004",
+      "file": "instances/instance_04_label_0004.ply",
+      "source_labels": [
+        4
+      ],
+      "num_gaussians": 75238,
+      "center_xyz": [
+        0.29314321279525757,
+        0.29524466395378113,
+        0.9341265559196472
+      ],
+      "bounds_min_xyz": [
+        -0.3333602845668793,
+        -0.0011839435901492834,
+        0.592386782169342
+      ],
+      "bounds_max_xyz": [
+        0.9042004346847534,
+        0.4316200911998749,
+        1.6662828922271729
+      ]
+    },
+    {
+      "id": 5,
+      "name": "instance_05_label_0005",
+      "file": "instances/instance_05_label_0005.ply",
+      "source_labels": [
+        5
+      ],
+      "num_gaussians": 508,
+      "center_xyz": [
+        -0.648414134979248,
+        0.09449556469917297,
+        0.7194665670394897
+      ],
+      "bounds_min_xyz": [
+        -0.7034768462181091,
+        0.07632521539926529,
+        0.6556967496871948
+      ],
+      "bounds_max_xyz": [
+        -0.6167876124382019,
+        0.11733680218458176,
+        0.7639419436454773
+      ]
+    },
+    {
+      "id": 6,
+      "name": "instance_06_label_0006",
+      "file": "instances/instance_06_label_0006.ply",
+      "source_labels": [
+        6
+      ],
+      "num_gaussians": 957,
+      "center_xyz": [
+        0.12945526838302612,
+        -0.06515897810459137,
+        1.3678423166275024
+      ],
+      "bounds_min_xyz": [
+        0.0815194770693779,
+        -0.09433282911777496,
+        1.1885946989059448
+      ],
+      "bounds_max_xyz": [
+        0.17621558904647827,
+        -0.023442672565579414,
+        1.4397594928741455
+      ]
+    },
+    {
+      "id": 7,
+      "name": "instance_07_labels_0008_0009_0010_0012",
+      "file": "instances/instance_07_labels_0008_0009_0010_0012.ply",
+      "source_labels": [
+        8,
+        9,
+        10,
+        12
+      ],
+      "num_gaussians": 209884,
+      "center_xyz": [
+        -0.11346808075904846,
+        -0.28385910391807556,
+        1.0654771327972412
+      ],
+      "bounds_min_xyz": [
+        -0.7195321321487427,
+        -0.7562271356582642,
+        0.6702513694763184
+      ],
+      "bounds_max_xyz": [
+        0.8613470196723938,
+        0.058565810322761536,
+        1.703145980834961
+      ]
+    },
+    {
+      "id": 8,
+      "name": "instance_08_label_0013",
+      "file": "instances/instance_08_label_0013.ply",
+      "source_labels": [
+        13
+      ],
+      "num_gaussians": 9879,
+      "center_xyz": [
+        0.8293159008026123,
+        -0.30761364102363586,
+        1.6444580554962158
+      ],
+      "bounds_min_xyz": [
+        0.6815614104270935,
+        -0.6280233263969421,
+        1.460266351699829
+      ],
+      "bounds_max_xyz": [
+        0.9360337257385254,
+        0.02490033209323883,
+        1.754836916923523
+      ]
+    },
+    {
+      "id": 9,
+      "name": "instance_09_label_0014",
+      "file": "instances/instance_09_label_0014.ply",
+      "source_labels": [
+        14
+      ],
+      "num_gaussians": 226718,
+      "center_xyz": [
+        -0.08208994567394257,
+        0.12226375192403793,
+        0.8007197380065918
+      ],
+      "bounds_min_xyz": [
+        -0.5746767520904541,
+        -0.21597391366958618,
+        0.43167048692703247
+      ],
+      "bounds_max_xyz": [
+        0.5238259434700012,
+        0.4329725205898285,
+        1.4707636833190918
+      ]
+    }
+  ],
+  "renderer_note": "Each instance file preserves the original 17-float 3DGS PLY record."
+}
