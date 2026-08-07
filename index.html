@@ -1539,9 +1539,10 @@
               <aside class="instance-demo-controls">
                 <label class="instance-demo-scene-label" for="instance-demo-scene-select">Scene</label>
                 <select class="instance-demo-scene-select" id="instance-demo-scene-select">
-                  <option value="batch144">Two remotes</option>
-                  <option value="scannetpp_0a7cc12c0e">ScanNet++ 0a7cc12c0e</option>
+                  <option value="batch144">Scene 1</option>
+                  <option value="scannetpp_0a7cc12c0e">Scene 2</option>
                 </select>
+                <p>More interactive demos are available in this menu.</p>
                 <h4 class="instance-demo-instance-heading">Instances</h4>
                 <p>Each button toggles one independently loaded Gaussian instance.</p>
                 <button class="instance-demo-reset" id="instance-demo-reset" type="button">Show all instances</button>
@@ -1767,7 +1768,7 @@
 
         const sceneConfigs = {
           batch144: {
-            label: "Two remotes",
+            label: "Scene 1",
             base: "assets/instance-demo/batch144_idx0_split_remote/",
             expectedInstances: 13,
             rotation: [
@@ -1785,9 +1786,9 @@
             cameraLookAt: [0, 0, 0.315],
           },
           scannetpp_0a7cc12c0e: {
-            label: "ScanNet++ 0a7cc12c0e",
+            label: "Scene 2",
             base: "assets/instance-demo/scannetpp_0a7cc12c0e_merged/",
-            expectedInstances: 10,
+            expectedInstances: 8,
             rotation: [
               -0.8392353773013319,
               -0.04809429298599967,
@@ -1818,18 +1819,7 @@
           mount.replaceChildren(fallback);
         };
 
-        const instanceName = (item, index) => {
-          if (item.source_label === 0 && Number.isInteger(item.split_component)) {
-            return "Remote " + (item.split_component + 1);
-          }
-          if (Array.isArray(item.source_labels)) {
-            if (item.source_labels.length > 1) {
-              return "Group " + item.source_labels.join("+");
-            }
-            return "Label " + item.source_labels[0];
-          }
-          return "Instance " + String(index + 1).padStart(2, "0");
-        };
+        const instanceName = (index) => "Instance " + (index + 1);
 
         const setCamera = (config) => {
           viewer.camera.position.fromArray(config.cameraPosition);
@@ -1869,7 +1859,7 @@
         const buildInstanceButtons = () => {
           buttonPanel.replaceChildren();
           manifest.instances.forEach((item, index) => {
-            const label = instanceName(item, index);
+            const label = instanceName(index);
             const button = document.createElement("button");
             button.className = "instance-demo-button";
             button.type = "button";
