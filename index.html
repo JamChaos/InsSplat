@@ -1492,6 +1492,7 @@
               <h3>Interactive Instance Removal</h3>
               <p>
                 This browser viewer renders the complete 3D Gaussian splat scene without downsampling.
+                The scene is aligned to a Z-up world frame with the ground at Z = 0.
                 Click an instance to hide or restore its full Gaussian group, and drag the scene to orbit.
               </p>
             </div>
@@ -1730,6 +1731,21 @@
         }
 
         const sceneBase = "assets/instance-demo/batch144_idx0_split_remote/";
+        // The network output is expressed in the first-view camera frame
+        // (X right, Y down, Z forward), rather than a gravity-aligned frame.
+        // This shared rigid transform maps the fitted floor normal to world +Z,
+        // centers the scene in X/Y, and places the floor at world Z = 0.
+        const sceneRotation = [
+          -0.9384464449790052,
+          -0.005858753484949367,
+          0,
+          0.3453750785940841,
+        ];
+        const scenePosition = [
+          -0.005405989571857617,
+          -0.6742805799413311,
+          0.9737374014503439,
+        ];
         const hiddenScenes = new Set();
         let viewer = null;
         let manifest = null;
@@ -1792,8 +1808,8 @@
             dynamicScene: true,
             useBuiltInControls: true,
             cameraUp: [0, 0, 1],
-            initialCameraPosition: [1.12, -1.18, 1.72],
-            initialCameraLookAt: [0.008, -0.042, 0.942],
+            initialCameraPosition: [0, -1.45, 0.48],
+            initialCameraLookAt: [0, 0, 0.315],
             sphericalHarmonicsDegree: 0,
             enableOptionalEffects: true,
             antialiased: false,
@@ -1831,6 +1847,8 @@
             path: sceneBase + item.file,
             splatAlphaRemovalThreshold: 0,
             progressiveLoad: false,
+            rotation: sceneRotation,
+            position: scenePosition,
           }));
 
           await viewer.addSplatScenes(
