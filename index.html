@@ -526,10 +526,10 @@
         min-height: 34px;
         margin-left: auto;
         padding: 7px 13px;
-        border: 1px solid var(--line-strong);
+        border: 1px solid var(--green);
         border-radius: 999px;
-        background: transparent;
-        color: var(--ink);
+        background: var(--green);
+        color: #fff;
         font: inherit;
         font-size: 12px;
         font-weight: 700;
@@ -538,9 +538,8 @@
 
       .sync-button:hover,
       .sync-button:focus-visible {
-        border-color: var(--green);
-        background: var(--green);
-        color: #fff;
+        border-color: var(--ink);
+        background: var(--ink);
       }
 
       .render-grid {
@@ -1653,40 +1652,96 @@
           syncButton.setAttribute("aria-pressed", "false");
           heading.appendChild(syncButton);
 
+          let isSyncing = false;
+          let referenceVideo = videos[0];
+          const programmaticSeeks = new WeakSet();
+
           const updateButton = (isPlaying) => {
             syncButton.textContent = isPlaying ? "Pause scene" : "Play scene";
             syncButton.setAttribute("aria-pressed", String(isPlaying));
           };
 
-          syncButton.addEventListener("click", async () => {
-            const shouldPlay = videos.some((video) => video.paused);
-            if (!shouldPlay) {
-              videos.forEach((video) => video.pause());
-              updateButton(false);
-              return;
-            }
-
-            const alignedTime = Math.max(
-              ...videos.map((video) => Number.isFinite(video.currentTime)
-                ? video.currentTime
-                : 0),
-            );
+          const alignVideos = (source, threshold = 0.05) => {
+            const alignedTime = Number.isFinite(source.currentTime)
+              ? source.currentTime
+              : 0;
             videos.forEach((video) => {
-              if (Math.abs(video.currentTime - alignedTime) > 0.05) {
+              if (video !== source && Math.abs(video.currentTime - alignedTime) > threshold) {
+                programmaticSeeks.add(video);
                 video.currentTime = alignedTime;
               }
             });
+          };
 
+          const playScene = async (source = referenceVideo) => {
+            referenceVideo = source;
+            isSyncing = true;
+            alignVideos(referenceVideo);
             const results = await Promise.allSettled(
               videos.map((video) => video.play()),
             );
-            updateButton(results.every((result) => result.status === "fulfilled"));
+            const didStart = results.every((result) => result.status === "fulfilled");
+            if (!didStart) {
+              videos.forEach((video) => video.pause());
+            }
+            updateButton(didStart);
+            isSyncing = false;
+          };
+
+          const pauseScene = () => {
+            isSyncing = true;
+            videos.forEach((video) => video.pause());
+            updateButton(false);
+            isSyncing = false;
+          };
+
+          syncButton.addEventListener("click", () => {
+            if (videos.some((video) => !video.paused)) {
+              pauseScene();
+            } else {
+              void playScene();
+            }
           });
 
           videos.forEach((video) => {
+            video.addEventListener("play", () => {
+              if (!isSyncing) {
+                void playScene(video);
+              }
+            });
+
             video.addEventListener("pause", () => {
-              if (videos.every((item) => item.paused)) {
-                updateButton(false);
+              if (!isSyncing) {
+                pauseScene();
+              }
+            });
+
+            video.addEventListener("seeked", () => {
+              if (programmaticSeeks.delete(video) || isSyncing) {
+                return;
+              }
+              referenceVideo = video;
+              isSyncing = true;
+              alignVideos(video);
+              isSyncing = false;
+            });
+
+            video.addEventListener("ratechange", () => {
+              if (isSyncing) {
+                return;
+              }
+              isSyncing = true;
+              videos.forEach((item) => {
+                item.playbackRate = video.playbackRate;
+              });
+              isSyncing = false;
+            });
+
+            video.addEventListener("timeupdate", () => {
+              if (!isSyncing && video === referenceVideo && !video.paused) {
+                isSyncing = true;
+                alignVideos(video, 0.12);
+                isSyncing = false;
               }
             });
           });
